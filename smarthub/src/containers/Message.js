@@ -9,7 +9,7 @@ function Message() {
           {/* 左侧区域 */}
           <Col md={2} className="border-right">
             <div className="py-3">
-              <h5>announcement</h5>
+              <h5>Announcement</h5>
             </div>
             <div className="py-3">
               <h5>Assessment</h5>
@@ -19,7 +19,7 @@ function Message() {
           {/* 右侧区域 */}
           <Col md={9}>
             <div className="py-3">
-              <h3>message List</h3>
+              <h3>Announcement List</h3>
               <hr />
               <p>Message 1</p>
               <hr />

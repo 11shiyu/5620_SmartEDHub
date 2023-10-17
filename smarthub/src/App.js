@@ -8,6 +8,8 @@ import Message from './containers/Message';
 import AIPractice from './containers/AIPractice';
 import ProfileStudent from './containers/ProfileStudent';
 import ProfileTeacher from './containers/ProfileTeacher';
+import Favourite from './containers/Favourite';
+import CorrectionBook from './containers/CorrectionBook';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/AIPractice" element={<AIPractice />} />
           <Route path="/ProfileStudent" element={<ProfileStudent />} />
           <Route path="/ProfileTeacher" element={<ProfileTeacher />} />
+          <Route path="/Favourite" element={<Favourite />} />
+          <Route path="/CorrectionBook" element={<CorrectionBook />} />
         </Routes>
       </div>
     </Router>
