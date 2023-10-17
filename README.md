@@ -1,5 +1,8 @@
 This is new react app for ELEC5620 group project SmartHub
 
+# install releated react library
+npm install react-bootstrap bootstrap
+npm install react-router-dom
 
 # Getting Started with Create React App
 
