@@ -1,7 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import QuestionList from '../components/QuestionList';
 
 function Message() {
+
+  
+  const [questions, setQuestions] = useState([
+    // 示例数据，你可以从API获取真实数据
+    { question_id: 1, question_title: 'Question 1', question_detail: 'Detail for Question 1' },
+    { question_id: 2, question_title: 'Question 2', question_detail: 'Detail for Question 2' },
+    { question_id: 3, question_title: 'Question 3', question_detail: 'Detail for Question 3' },
+    { question_id: 4, question_title: 'Question 4', question_detail: 'Detail for Question 4' },
+    // ...其他问题
+  ]);
+
+  // useEffect(() => {
+  //     // 假设fetchQuestions是一个异步方法，从数据库获取问题列表
+  //     async function fetchQuestions() {
+  //         const data = await yourAPI.getQuestions(); // 替换为你实际的API调用
+  //         setQuestions(data);
+  //     }
+
+  //     fetchQuestions();
+  // }, []);
+
   return (
     <div>
       <Container fluid>
@@ -21,7 +43,7 @@ function Message() {
             <div className="py-3">
               <h3>Announcement List</h3>
               <hr />
-              <p>Message 1</p>
+              <QuestionList questions={questions} setQuestions={setQuestions} />
               <hr />
               <p>Message 2</p>
               <hr />
