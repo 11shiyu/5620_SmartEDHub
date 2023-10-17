@@ -13,8 +13,7 @@ const NavigationBar = () => {
                         <Nav.Link as={Link} to="/AIPractice">AI Practice</Nav.Link>
                         <Nav.Link as={Link} to="/Message">Message</Nav.Link>
                         <Nav.Link as={Link} to="/ProfileStudent">Student Profile</Nav.Link>
-                        <Nav.Link as={Link} to="/ProfileTeacher">Teacher Profile</Nav.Link>
-                        {/* 以下是一个下拉示例，你可以根据需要修改它 */}                   
+                        <Nav.Link as={Link} to="/ProfileTeacher">Teacher Profile</Nav.Link>             
                     </Nav>
                 </Navbar.Collapse>
             </Container>
