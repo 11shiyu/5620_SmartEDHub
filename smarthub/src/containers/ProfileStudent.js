@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import studentImage from '../assets/student.png';
 
 function ProfileStudent({ studentData }) {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ function ProfileStudent({ studentData }) {
         <Col>
           <Row>
             <Card style={{ width: '18rem', marginRight: '20px' }}>
-              <Card.Img variant="top" src="../assets/student.png" />
+              <Card.Img variant="top" src={studentImage} />
               <Card.Body>
                 <Card.Title>student name</Card.Title>
               </Card.Body>

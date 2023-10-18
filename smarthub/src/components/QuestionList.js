@@ -19,7 +19,7 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
         let updatedQuestions = [];
         if (currentTab === 'Announcement') {
             updatedQuestions = questions.filter(q => q.announcement_id !== id);
-        } else if (currentTab === 'Assessment') {
+        } else if (currentTab === 'Assessment' || currentTab === 'Favourite' || currentTab === 'CorrectionBook') {
             updatedQuestions = questions.filter(q => q.question_id !== id);
         }
         //const updatedQuestions = questions.filter(q => q.question_id !== id);
@@ -36,7 +36,7 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                     idProperty = 'announcement_id';
                     titleProperty = 'announcement_title';
                     detailProperty = 'announcement_detail';
-                } else if (currentTab === 'Assessment') {
+                } else if (currentTab === 'Assessment' || currentTab === 'Favourite' || currentTab === 'CorrectionBook') {
                     idProperty = 'question_id';
                     titleProperty = 'question_title';
                     detailProperty = 'question_detail';
