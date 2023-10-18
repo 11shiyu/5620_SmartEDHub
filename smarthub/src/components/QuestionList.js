@@ -7,29 +7,51 @@ const deleteQuestionFromDB = async (id) => {
   console.log(`Deleted question with ID: ${id}`);
 };
 
-function QuestionList({ questions, setQuestions }) { // 通过结构赋值来接受questions prop
+function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构赋值来接受questions prop
 
     const handleDelete = async (id) => {
         // 删除数据库中的数据
         await deleteQuestionFromDB(id);
     
         //更新状态，移除已删除的问题
-        const updatedQuestions = questions.filter(q => q.question_id !== id);
+        //console.log("currentTab:", currentTab);
+        //console.log("currentQuestion:", questions);
+        let updatedQuestions = [];
+        if (currentTab === 'Announcement') {
+            updatedQuestions = questions.filter(q => q.announcement_id !== id);
+        } else if (currentTab === 'Assessment') {
+            updatedQuestions = questions.filter(q => q.question_id !== id);
+        }
+        //const updatedQuestions = questions.filter(q => q.question_id !== id);
         setQuestions(updatedQuestions);
       };
 
 
     return (
         <div>
-            {questions.map((question) => (
-                <Card key={question.question_id} style={{ marginBottom: '20px' }}>
-                    <Card.Body>
-                        <Card.Title>{question.question_title}</Card.Title>
-                        <Card.Text>{question.question_detail}</Card.Text>
-                        <Button variant="danger" onClick={() => handleDelete(question.question_id)}>delete</Button>
-                    </Card.Body>
-                </Card>
-            ))}
+            {questions.map((question) => {
+                // 根据 currentTab 决定要使用的属性
+                let idProperty, titleProperty, detailProperty;
+                if (currentTab === 'Announcement') {
+                    idProperty = 'announcement_id';
+                    titleProperty = 'announcement_title';
+                    detailProperty = 'announcement_detail';
+                } else if (currentTab === 'Assessment') {
+                    idProperty = 'question_id';
+                    titleProperty = 'question_title';
+                    detailProperty = 'question_detail';
+                }
+
+                return (
+                    <Card key={question[idProperty]} style={{ marginBottom: '20px' }}>
+                        <Card.Body>
+                            <Card.Title>{question[titleProperty]}</Card.Title>
+                            <Card.Text>{question[detailProperty]}</Card.Text>
+                            <Button variant="danger" onClick={() => handleDelete(question[idProperty])}>delete</Button>
+                        </Card.Body>
+                    </Card>
+                );
+            })}
         </div>
     );
 }
