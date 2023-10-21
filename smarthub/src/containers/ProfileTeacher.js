@@ -45,6 +45,9 @@ function ProfileTeacher({ teacherData }) {
             <Button variant="danger" onClick={() => navigate('/Grading')} style={{ marginTop: '10px' }}>
               Grading Assignment
             </Button>
+            <Button variant="danger" onClick={() => navigate('/ClassManagement')} style={{ marginTop: '10px' }}>
+              Class Management
+            </Button>
           </Row>
         </Col>
       </div>
