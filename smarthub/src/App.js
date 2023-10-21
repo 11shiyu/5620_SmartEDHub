@@ -10,6 +10,8 @@ import ProfileStudent from './containers/ProfileStudent';
 import ProfileTeacher from './containers/ProfileTeacher';
 import Favourite from './containers/Favourite';
 import CorrectionBook from './containers/CorrectionBook';
+import CreateAssignment from './containers/CreateAssignment';
+import Grading from './containers/Grading';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="/ProfileTeacher" element={<ProfileTeacher />} />
           <Route path="/Favourite" element={<Favourite />} />
           <Route path="/CorrectionBook" element={<CorrectionBook />} />
+          <Route path="/CreateAssignment" element={<CreateAssignment />} />
+          <Route path="/Grading" element={<Grading />} />
         </Routes>
       </div>
     </Router>
