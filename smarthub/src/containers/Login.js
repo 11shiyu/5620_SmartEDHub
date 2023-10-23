@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 //import axios from '../axiosConfig'; 
 
 class Login extends Component {
@@ -51,8 +52,9 @@ class Login extends Component {
         .then(response => response.json())
         .then(data => {
           console.log(data); 
-          sessionStorage.setItem("tokenStr", res.data.obj.tokenHead+res.data.obj.token)
-
+          sessionStorage.setItem("tokenStr", res.data.obj.tokenHead+res.data.obj.token);
+          const history = useHistory();
+          history.push('/Home');
         })
         .catch(error => {
           console.error('请求失败', error);
