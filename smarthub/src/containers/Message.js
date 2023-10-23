@@ -29,15 +29,19 @@ function Message() {
     
   ]);
 
-  // useEffect(() => {
-  //     // 假设fetchQuestions是一个异步方法，从数据库获取问题列表
-  //     async function fetchQuestions() {
-  //         const data = await yourAPI.getQuestions(); // 替换为你实际的API调用
-  //         setQuestions(data);
-  //     }
+  const yourAPI = "";
+  const [test, setTest] = useState([]);
+  useEffect(() => {
+      // 假设fetchQuestions是一个异步方法，从数据库获取问题列表
+      async function fetchQuestions() {
+          const response = await fetch(yourAPI); // 替换为你实际的API调用
+          const data = await response.json();
+          console.log("testData", data);
+          setTest(test);
+      }
 
-  //     fetchQuestions();
-  // }, []);
+      fetchQuestions();
+  }, []);
 
   return (
     <div>
