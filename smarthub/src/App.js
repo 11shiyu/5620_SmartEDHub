@@ -13,6 +13,8 @@ import CorrectionBook from './containers/CorrectionBook';
 import CreateAssignment from './containers/CreateAssignment';
 import Grading from './containers/Grading';
 import ClassManagement from './containers/ClassManagement';
+import Register from './containers/Register';
+import Login from './containers/Login';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           <Route path="/CreateAssignment" element={<CreateAssignment />} />
           <Route path="/Grading" element={<Grading />} />
           <Route path="/ClassManagement" element={<ClassManagement />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
         </Routes>
       </div>
     </Router>
