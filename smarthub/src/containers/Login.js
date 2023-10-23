@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from '../axiosConfig'; 
+//import axios from '../axiosConfig'; 
 
 class Login extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class Login extends Component {
     if (username === '' || password === '') {
         this.showNotification('Please input all the information!')
     } else {
-      fetch('/api/login', {
+      fetch('http://localhost:8090/login', {
         method: 'POST', // 指定请求方法为POST
         headers: {
           'Content-Type': 'application/json', // 设置请求头部
@@ -51,6 +51,8 @@ class Login extends Component {
         .then(response => response.json())
         .then(data => {
           console.log(data); 
+          sessionStorage.setItem("tokenStr", res.data.obj.tokenHead+res.data.obj.token)
+
         })
         .catch(error => {
           console.error('请求失败', error);
