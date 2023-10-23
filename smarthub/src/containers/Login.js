@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+//import { useHistory } from 'react-router-dom';
 //import axios from '../axiosConfig'; 
 
 class Login extends Component {
@@ -52,9 +52,9 @@ class Login extends Component {
         .then(response => response.json())
         .then(data => {
           console.log(data); 
-          sessionStorage.setItem("tokenStr", res.data.obj.tokenHead+res.data.obj.token);
-          const history = useHistory();
-          history.push('/Home');
+          sessionStorage.setItem("tokenStr", data.data.tokenHead+data.data.token);
+          // const history = useHistory();
+          // history.push('/Home');
         })
         .catch(error => {
           console.error('请求失败', error);
@@ -75,7 +75,7 @@ class Login extends Component {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '200px',
+        marginTop: '20px',
     };
     const passwordCont = {
         position: 'relative',
@@ -102,6 +102,7 @@ class Login extends Component {
 
     return (
       <div style={loginCont}>
+        <h2 style={{marginTop:"180px"}}>Login</h2>
         <div style={usernameCont}>
           <label style={{marginRight: '20px'}}>Username:</label>
           <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
