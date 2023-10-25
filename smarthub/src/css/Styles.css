@@ -10,3 +10,12 @@ transform: scale(1.05);  /* 当按钮处于活动状态时，将其放大 */
 background-color: #007bff;  /* 设置背景颜色 */
 color: #fff;  /* 设置文字颜色 */
 }
+
+.questionContent {
+    border: 3px solid #feae3a;
+    padding: 10px;
+    margin: 20px auto 40px;
+    width: 90%;
+    height: 300px;
+    overflow: auto;
+}

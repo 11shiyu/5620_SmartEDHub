@@ -2,10 +2,23 @@ import { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import EditStudentsModal from './EditStudentsModal';
 
-// 假设的API方法，用于从数据库删除特定ID的课程
+//假设的API方法，用于从数据库删除特定ID的课程
 const deleteClassFromDB = async (id) => {
-    // 在这里可以调用API来从数据库删除课程
-    console.log(`Deleted class with ID: ${id}`);
+    try {
+        const response = await fetch('http://localhost:8090/classroom/deleteClassroom', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json', // 设置请求头部
+                'Authorization': sessionStorage.getItem("tokenStr")
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        console.log(`Deleted class with ID: ${id}`);
+    } catch (error) {
+        console.error(`Could not delete class with ID: ${id}. Error: ${error}`);
+    }
 };
   
 function ClassList({ classes, setClasses }) { 
@@ -23,7 +36,7 @@ function ClassList({ classes, setClasses }) {
     const handleDelete = async (id) => {
         // 删除数据库中的数据
         await deleteClassFromDB(id);
-      
+        
         // 更新状态，移除已删除的课程
         const updatedClasses = classes.filter(c => c.classID !== id);
         setClasses(updatedClasses);

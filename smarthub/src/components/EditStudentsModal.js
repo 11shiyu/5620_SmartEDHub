@@ -37,7 +37,7 @@ function EditStudentsModal({ show, handleClose, handleAdd, handleRemove, current
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button style={{ marginRight: '10px' }} variant="success" onClick={() => handleAdd(studentIdInput)}>Add Student</Button>
+                <Button variant="success" onClick={() => handleAdd(studentIdInput)}>Add Student</Button>
                 <Button variant="danger" onClick={() => handleRemove(studentIdInput)}>Remove Student</Button>
             </Modal.Footer>
         </Modal>

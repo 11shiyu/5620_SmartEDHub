@@ -15,6 +15,7 @@ import Grading from './containers/Grading';
 import ClassManagement from './containers/ClassManagement';
 import Register from './containers/Register';
 import Login from './containers/Login';
+import GenerateAssign from './containers/GenerateAssign';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/ClassManagement" element={<ClassManagement />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
+          <Route path="/GenerateAssign" element={<GenerateAssign />} />
         </Routes>
       </div>
     </Router>

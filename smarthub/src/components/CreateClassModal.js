@@ -17,7 +17,7 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
     }, [show]);
 
     const checkStudentExistsInDB = async (studentId) => {
-        // 在这里调用API来查询数据库中的学生ID, 通过返回一个布尔值，判断学生是否存在
+        
 
         //测试
         return false;
@@ -38,7 +38,6 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
 
     const handleSubmit = () => {
         const newClassData = {
-            classID: Math.random().toString(36).substr(2, 9), // 生成一个随机ID
             studentID: studentsInClass,
             teacherID: 'T001', // 获取自身的TeacherID
             className: className
