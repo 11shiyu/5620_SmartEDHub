@@ -2,15 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
 function SelectClassModal({ show, handleClose, classes }) {
-    const [selectedClass, setSelectedClass] = useState([]);
-
-    const handleSelectClass = (id) => {
-        if (selectedClass.includes(id)) {
-          setSelectedClass(selectedClass.filter(classId => classId !== id));
-        } else {
-          setSelectedClass([...selectedClass, id]);
-        }
-    };
+    const [selectedClass, setSelectedClass] = useState('');
 
     const handleSubmit = () => {
         console.log('Selected class:', selectedClass);
@@ -28,12 +20,11 @@ function SelectClassModal({ show, handleClose, classes }) {
                     {classes.map((classItem) => (
                         <Form.Check
                             key={classItem.id}
-                            type="checkbox"
+                            type="radio"
                             label={classItem.name}
                             name="classGroup"
                             id={classItem.id}
-                            onChange={() => handleSelectClass(classItem.id)}
-                            checked={selectedClass.includes(classItem.id)}
+                            onChange={() => setSelectedClass(classItem.id)}
                         />
                     ))}
                 </Form>

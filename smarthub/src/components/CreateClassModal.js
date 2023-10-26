@@ -20,7 +20,7 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
         
 
         //测试
-        return false;
+        return true;
     };
 
     const handleAddStudent = async (studentId) => {
@@ -36,15 +36,65 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
         }
     };
 
-    const handleSubmit = () => {
-        const newClassData = {
-            studentID: studentsInClass,
-            teacherID: 'T001', // 获取自身的TeacherID
-            className: className
-        };
-    
-        handleCreate(newClassData);
-        handleClose();
+    const handleSubmit = async () => {
+        try {
+            const createClassResponse = await fetch('http://localhost:8090/classroom/createClassroom', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头部
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                },
+                body: JSON.stringify({ classname: className })
+            });
+
+            if (!createClassResponse.ok) {
+                throw new Error(`HTTP error! status: ${createClassResponse.status}`);
+            }
+            //需要更新获取登录的老师用户名
+            const getClassIDResponse = await fetch(`http://localhost:8090/classroom/teacherGetClassroomList?teacherUsername=S005&classname=${className}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头部
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                },
+            });
+
+            if (!getClassIDResponse.ok) {
+                    throw new Error(`HTTP error! status: ${getClassIDResponse.status}`);
+            }
+
+            const classData = await getClassIDResponse.json();
+            const classInfo = classData.data.find(c => c.classname === className && c.username === 'S005');
+            if (!classInfo) {
+                throw new Error(`Class with name ${className} not found for teacher S005`);
+            }
+            const classID = classInfo.classId;
+            console.log(classID);
+            
+            for (const studentId of studentsInClass) {
+                const intStudentId = parseInt(studentId);
+                if (isNaN(intStudentId)) {
+                    throw new Error(`Invalid student ID: ${studentId}`);
+                }
+
+                const addToClassResponese = await fetch(`http://localhost:8090/classroom/addToClassroom?classId=${classID}&studentId=${intStudentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // 设置请求头部
+                        'Authorization': sessionStorage.getItem("tokenStr")
+                    },
+                });
+
+                if (!addToClassResponese.ok) {
+                    throw new Error(`HTTP error! status: ${addToClassResponese.status}`);
+                }
+            }
+
+            handleClose();
+        } catch (error) {
+            console.error(`Could not create class. Error: ${error}`);
+            setError(`Could not create class. Error: ${error}`);
+        }
     };
 
     return (

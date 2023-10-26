@@ -12,6 +12,10 @@ function GenerateAssign() {
         navigate('/ProfileTeacher'); 
     };
 
+    const handleCancelClick = () => {
+        navigate('/CreateAssignment');
+    };
+
     const location = useLocation();
     const questionSet = location.state.formData;
 
@@ -20,6 +24,7 @@ function GenerateAssign() {
 
     useEffect(() => {
         // 在这里调用API从数据库获取班级信息
+        //fetch
         //测试
         const fetchedClasses = [
             { id: '1', name: 'ClassA' },
@@ -59,7 +64,7 @@ function GenerateAssign() {
                                 </div>
                             </div>
                             <div style={{marginBottom: '40px'}}>
-                                <Button variant="warning" style={{marginRight: '5%'}}>Refresh</Button>
+                                <Button variant="warning" onClick={handleCancelClick} style={{marginRight: '5%'}}>Cancel</Button>
                                 <Button variant="primary" onClick={handleShowModal}>Confirmed</Button>
                                 <SelectClassModal show={showModal} handleClose={handleCloseModal} classes={classes} />
                             </div>

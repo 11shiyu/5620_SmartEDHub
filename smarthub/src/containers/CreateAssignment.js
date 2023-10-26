@@ -25,11 +25,36 @@ function CreateAssignment() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form Data Submitted:', formData);
-        // 在这里添加将表单数据发送到服务器的代码
 
+        //如果requirements内容为空，就删掉他
+        const updatedFormData = {...formData};
+        if (!updatedFormData.requirements || updatedFormData.requirements.trim() === '') {
+            delete updatedFormData.requirements;
+        }
+
+        // 在这里添加将表单数据发送到服务器的代码
+        try {
+            const response = await fetch('http://localhost:8090/teacherGenerateQuestionsByGPT', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头部
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                },
+                body: JSON.stringify(updatedFormData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Form Data Submitted:', data);
+
+        } catch (error) {
+            console.error(`Could not submit form. Error: ${error}`);
+        }
         //页面跳转
         navigate('/GenerateAssign', { state: { formData } });
     };
@@ -50,53 +75,56 @@ function CreateAssignment() {
                             <Form onSubmit={handleSubmit}>
                                 <Row style={{marginTop: '60px'}}>
                                     <Form.Group as={Col} controlId="formGridSubject">
-                                        <Form.Label style={{color: '#feae3a'}}>Subject</Form.Label>
+                                        <Form.Label style={{color: '#feae3a'}}>Subject*</Form.Label>
                                         <Form.Control 
                                             as="select" 
                                             name="subject" 
                                             value={formData.subject} 
                                             onChange={handleChange}
+                                            required
                                         >
-                                            <option>Select...</option>
-                                            <option>Math</option>
-                                            <option>Physics</option>
-                                            <option>Chemistry</option>
-                                            <option>Biology</option>
-                                            <option>History</option>
-                                            <option>Geography</option>
+                                            <option value= ''>Select...</option>
+                                            <option value= 'Maths'>Maths</option>
+                                            <option value= 'Physics'>Physics</option>
+                                            <option value= 'Chemistry'>Chemistry</option>
+                                            <option value= 'Biology'>Biology</option>
+                                            <option value= 'History'>History</option>
+                                            <option value= 'Geography'>Geography</option>
                                         </Form.Control>
                                     </Form.Group>
 
                                     <Form.Group as={Col} controlId="formGridLevel">
-                                        <Form.Label style={{color: '#feae3a'}}>Level</Form.Label>
+                                        <Form.Label style={{color: '#feae3a'}}>Level*</Form.Label>
                                         <Form.Control 
                                             as="select" 
                                             name="level" 
                                             value={formData.level} 
                                             onChange={handleChange}
+                                            required
                                         >
-                                            <option>Select...</option>
-                                            <option>Primary School</option>
-                                            <option>Middle School</option>
-                                            <option>High School</option>
-                                            <option>Undergraduate</option>
-                                            <option>PhD</option>
+                                            <option value= ''>Select...</option>
+                                            <option value= 'Primary School'>Primary School</option>
+                                            <option value= 'Middle School'>Middle School</option>
+                                            <option value= 'High School'>High School</option>
+                                            <option value= 'Undergraduate'>Undergraduate</option>
+                                            <option value= 'PhD'>PhD</option>
                                         </Form.Control>
                                     </Form.Group>
 
                                     <Form.Group as={Col} controlId="formGridQuestionType">
-                                        <Form.Label style={{color: '#feae3a'}}>Type of Question</Form.Label>
+                                        <Form.Label style={{color: '#feae3a'}}>Type of Question*</Form.Label>
                                         <Form.Control 
                                             as="select" 
                                             name="questionType" 
                                             value={formData.questionType} 
                                             onChange={handleChange}
+                                            required
                                         >
-                                            <option>Select...</option>
-                                            <option>Multiple-choice question</option>
-                                            <option>Fill-in-the-blank question</option>
-                                            <option>Short answer question</option>
-                                            <option>Open question</option>
+                                            <option value= ''>Select...</option>
+                                            <option value= '2'>Multiple-choice question</option>
+                                            <option value= '3'>Fill-in-the-blank question</option>
+                                            <option value= '4'>Short answer question</option>
+                                            <option value= '5'>Open question</option>
                                         </Form.Control>
                                     </Form.Group>
                                 </Row>
