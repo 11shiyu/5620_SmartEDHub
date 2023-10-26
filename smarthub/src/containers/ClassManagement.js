@@ -56,14 +56,6 @@ function ClassManagement() {
         fetchClasses();
     }, []);
 
-    // 假设的API方法，用于创建新的班级
-    const createNewClassInDB = async (classData) => {
-        // 在这里可以调用API来在数据库中创建新的班级
-        console.log(`Created new class with data:`, classData);
-        // 假设返回新创建的班级数据
-        return classData;
-    };
-
     const handleBackClick = () => {
         navigate('/ProfileTeacher');
     };

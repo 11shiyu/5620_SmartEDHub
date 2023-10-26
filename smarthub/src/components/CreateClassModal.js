@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import minusImg from '../assets/minus.png';
 
 function CreateClassModal({ show, handleClose, handleCreate }) {
     const [className, setClassName] = useState('');
@@ -18,7 +19,6 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
 
     const checkStudentExistsInDB = async (studentId) => {
         
-
         //测试
         return true;
     };
@@ -31,6 +31,7 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
                 return;
             } 
             setStudentsInClass(prevStudents => [...prevStudents, studentId]);
+            setStudentIdInput('');
         } else {
             setError(`Student with ID ${studentId} is already in the class.`);
         }
@@ -94,12 +95,15 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
             setClassName('');
             setStudentsInClass([]);
             setError(null);
-
             console.log('Class created and students added successfully');
         } catch (error) {
             console.error(`Could not create class. Error: ${error}`);
             setError(`Could not create class. Error: ${error}`);
         }
+    };
+
+    const removeStudentFromList = (studentId) => {
+        setStudentsInClass(studentsInClass.filter(id => id !== studentId));
     };
 
     return (
@@ -131,7 +135,15 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
                 <div style={{ maxHeight: '150px', overflowY: 'scroll', marginTop: '10px', border: '1px solid #ccc', padding: '10px' }}>
                     <h5>Students in this class:</h5>
                     {studentsInClass.map(studentId => (
-                        <div key={studentId}>{studentId}</div>
+                        <div key={studentId} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+                            <img 
+                                src={minusImg} 
+                                alt="delete" 
+                                style={{ cursor: 'pointer', width: '20px', height: '20px' }} 
+                                onClick={() => removeStudentFromList(studentId)}
+                            />
+                            <div style={{ marginLeft: '10px' }}>{studentId}</div>
+                        </div>
                     ))}
                 </div>
             </Modal.Body>
