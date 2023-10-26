@@ -132,7 +132,7 @@ function ClassList({ classes, setClasses }) {
                         <Card.Text>
                             <strong>Class ID:</strong> {classItem.classID} <br/>
                             <strong>Teacher Name:</strong> {classItem.teacherName} <br/>
-                            <strong>Number of Students:</strong>
+                            <strong>Number of Students:</strong> {classItem.countStudent}
                         </Card.Text>
                         <Button variant="danger" onClick={() => handleDelete(classItem.classID)}>Delete</Button>
                         <Button variant="warning" style={{ marginLeft: '10px' }} onClick={() => handleEdit(classItem)}>Edit Students</Button>

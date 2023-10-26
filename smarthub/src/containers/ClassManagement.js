@@ -26,12 +26,27 @@ function ClassManagement() {
               }
         
               const classData = await classListResponse.json();
-              const classesList = classData.data.map(classItem => ({
-                classID: classItem.classId,
-                className: classItem.classname,
-                teacherName: classItem.username
+              const classesList = await Promise.all(classData.data.map (async (classItem) => {
+                const countResponse = await fetch(`http://localhost:8090/classroom/countStudent?classId=${classItem.classId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json', // 设置请求头部
+                        'Authorization': sessionStorage.getItem("tokenStr")
+                    }
+                });
+
+                if (!countResponse.ok) {
+                    throw new Error(`HTTP error! status: ${countResponse.status}`);
+                }
+
+                const countStudent = await countResponse.text();
+                return {
+                    classID: classItem.classId,
+                    className: classItem.classname,
+                    teacherName: classItem.username,
+                    countStudent: countStudent
+                };
               }));
-        
               setClasses(classesList);
             } catch (error) {
               console.error('Failed to fetch classes:', error);
