@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +22,7 @@ class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    if(this.state.role == "student"){
+    if(this.state.role === "student"){
       fetch('http://localhost:8090/studentRegister', {
         method: 'POST', // 指定请求方法为POST
         headers: {
@@ -46,6 +47,8 @@ class Register extends Component {
         .catch(error => {
           console.error('请求失败', error);
         });
+    }else{
+
     }
     // 在这里添加注册逻辑，可以将用户输入的数据发送到后端进行注册
     
