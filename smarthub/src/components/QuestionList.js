@@ -33,9 +33,9 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                 // 根据 currentTab 决定要使用的属性
                 let idProperty, titleProperty, detailProperty;
                 if (currentTab === 'Announcement') {
-                    idProperty = 'announcement_id';
-                    titleProperty = 'announcement_title';
-                    detailProperty = 'announcement_detail';
+                    idProperty = 'announcementId';
+                    titleProperty = 'announcementTitle';
+                    detailProperty = 'announcementDetail';
                 } else if (currentTab === 'Assessment' || currentTab === 'Favourite' || currentTab === 'CorrectionBook') {
                     idProperty = 'questionId';
                     titleProperty = 'questionTitle';

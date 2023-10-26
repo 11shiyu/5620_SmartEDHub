@@ -14,10 +14,10 @@ function Message() {
   }
   const [announcements, setAnnouncements] = useState([
     // ...你的示例数据
-    { announcement_id: 1, announcement_title: 'announcement 1', announcement_detail: 'Detail for announcement 1' },
-    { announcement_id: 2, announcement_title: 'announcement 2', announcement_detail: 'Detail for announcement 2' },
-    { announcement_id: 3, announcement_title: 'announcement 3', announcement_detail: 'Detail for announcement 3' },
-    { announcement_id: 4, announcement_title: 'announcement 4', announcement_detail: 'Detail for Question 4' },
+    { announcementId: 1, announcementTitle: 'announcement 1', announcementDetail: 'Detail for announcement 1' },
+    { announcementId: 2, announcementTitle: 'announcement 2', announcementDetail: 'Detail for announcement 2' },
+    { announcementId: 3, announcementTitle: 'announcement 3', announcementDetail: 'Detail for announcement 3' },
+    { announcementId: 4, announcementTitle: 'announcement 4', announcementDetail: 'Detail for Question 4' },
   ]);
 
   const [questions, setQuestions] = useState([
@@ -29,13 +29,19 @@ function Message() {
     
   ]);
 
-  const yourAPI = "http://localhost:8090/question/getQuestionByStudentUsername";
-  const [test, setTest] = useState([]);
+  const studentId = JSON.parse(sessionStorage.getItem('studentInfo')).studentId
+  //const classId = JSON.parse(sessionStorage.getItem('studentInfo')).classId
+  const announcementTitle = "";
+  console.log('student id is :', studentId)
+  //console.log('student class id is :', JSON.parse(sessionStorage.getItem('studentInfo')))
+  const questionAPI = "http://localhost:8090/question/getAllQuestion";
+  const announcemenntAPI = `http://localhost:8090/announcement/showAnnouncementByStudentId?studentId=${studentId}&announcementTitle=${announcementTitle}`;
+  const allAnnouncemenntAPI = `http://localhost:8090/announcement/showAllOrSpecificAnnouncement`;
   useEffect(() => {
       // 假设fetchQuestions是一个异步方法，从数据库获取问题列表
       async function fetchQuestions() {
         try {
-            const response = await fetch(yourAPI, {
+            const response = await fetch(questionAPI, {
                 method: 'GET', // 设置请求方法为POST
                 headers: {
                     'Content-Type': 'application/json', // 设置请求头
@@ -48,14 +54,37 @@ function Message() {
             }
 
             const data = await response.json();
-            console.log("testData", data);
-            setQuestions(data); // 假设您想要将返回的数据保存到test状态中
+            console.log("questionData", data.data.rows);
+            setQuestions(data.data.rows); // 假设您想要将返回的数据保存到test状态中
         } catch (error) {
             console.error('获取学生题目失败:', error);
         }
     }
 
+    async function fetchAnnouncements() {
+      try {
+          const response = await fetch(announcemenntAPI, {
+              method: 'GET', // 设置请求方法为POST
+              headers: {
+                  'Content-Type': 'application/json', // 设置请求头
+                  'Authorization': window.sessionStorage.getItem('tokenStr')
+              },
+          });
+          
+          if (!response.ok) {
+              throw new Error('Network response was not ok ' + response.statusText);
+          }
+
+          const data = await response.json();
+          console.log("announcementData", data);
+          setAnnouncements(data.data); // 假设您想要将返回的数据保存到test状态中
+      } catch (error) {
+          console.error('获取学生公告失败:', error);
+      }
+  }
+
       fetchQuestions();
+      fetchAnnouncements();
   }, []);
 
   return (
