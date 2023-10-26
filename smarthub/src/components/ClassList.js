@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import EditStudentsModal from './EditStudentsModal';
 
-//假设的API方法，用于从数据库删除特定ID的课程
+//用于从数据库删除特定ID的课程
 const deleteClassFromDB = async (id) => {
     try {
-        const response = await fetch('http://localhost:8090/classroom/deleteClassroom', {
+        const response = await fetch(`http://localhost:8090/classroom/deleteClassroom?classroomId=${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json', // 设置请求头部
@@ -55,33 +55,66 @@ function ClassList({ classes, setClasses }) {
                 return;
             }
     
-            const updatedClasses = classes.map(c => {
-                if (c.classID === currentClass.classID) {
-                    return { ...c, studentID: [...c.studentID, studentId] };
+            try {
+                const addStudentResponse = await fetch(`http://localhost:8090/classroom/addToClassroom?classId=${currentClass.classID}&studentId=${studentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': sessionStorage.getItem("tokenStr")
+                    },
+                });
+    
+                if (!addStudentResponse.ok) {
+                    throw new Error(`HTTP error! status: ${addStudentResponse.status}`);
                 }
-                return c;
-            });
-            setClasses(updatedClasses);
-            setShowModal(false);
+                console.log('Add Student Successfully');
+                // const updatedClasses = classes.map(c => {
+                //     if (c.classID === currentClass.classID) {
+                //         return { ...c, studentID: [...c.studentID, studentId] };
+                //     }
+                //     return c;
+                // });
+                //setClasses(updatedClasses);
+                setShowModal(false);
+            } catch (error) {
+                console.error(`Could not add student with ID: ${studentId} to class with ID: ${currentClass.classID}. Error: ${error}`);
+                setError(`Could not add student with ID: ${studentId} to class. Please try again later.`);
+            }
         }
     };
 
-    const handleRemoveStudent = (studentId) => {
+    const handleRemoveStudent = async (studentId) => {
         if (currentClass) {
             // 检查班级中是否有该学生
-            if (!currentClass.studentID.includes(studentId)) {
-                setError(`Student with ID ${studentId} does not exist in this class.`);
-                return;
-            }
+            // if (!currentClass.studentID.includes(studentId)) {
+            //     setError(`Student with ID ${studentId} does not exist in this class.`);
+            //     return;
+            // }
 
-            const updatedClasses = classes.map(c => {
-                if (c.classID === currentClass.classID) {
-                    return { ...c, studentID: c.studentID.filter(id => id !== studentId) };
+            try {
+                const removeStudentResponse = await fetch(`http://localhost:8090/classroom/deleteStudent?classId=${currentClass.classID}&studentId=${studentId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': sessionStorage.getItem("tokenStr")
+                    },
+                });
+                if (!removeStudentResponse.ok) {
+                    throw new Error(`HTTP error! status: ${removeStudentResponse.status}`);
                 }
-                return c;
-            });
-            setClasses(updatedClasses);
-            setShowModal(false);
+                console.log('Remove Student Successfully');
+                // const updatedClasses = classes.map(c => {
+                //     if (c.classID === currentClass.classID) {
+                //         return { ...c, studentID: c.studentID.filter(id => id !== studentId) };
+                //     }
+                //     return c;
+                // });
+                // setClasses(updatedClasses);
+                setShowModal(false);
+            } catch (error) {
+                console.error(`Could not remove student with ID: ${studentId} to class with ID: ${currentClass.classID}. Error: ${error}`);
+                setError(`Could not remove student with ID: ${studentId} to class. Please try again later.`);
+            }
         }
     };
 
@@ -97,8 +130,9 @@ function ClassList({ classes, setClasses }) {
                     <Card.Body>
                         <Card.Title>{classItem.className}</Card.Title>
                         <Card.Text>
-                            <strong>Teacher ID:</strong> {classItem.teacherID} <br/>
-                            <strong>Number of Students:</strong> {classItem.studentID.length}
+                            <strong>Class ID:</strong> {classItem.classID} <br/>
+                            <strong>Teacher Name:</strong> {classItem.teacherName} <br/>
+                            <strong>Number of Students:</strong>
                         </Card.Text>
                         <Button variant="danger" onClick={() => handleDelete(classItem.classID)}>Delete</Button>
                         <Button variant="warning" style={{ marginLeft: '10px' }} onClick={() => handleEdit(classItem)}>Edit Students</Button>

@@ -91,6 +91,11 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
             }
 
             handleClose();
+            setClassName('');
+            setStudentsInClass([]);
+            setError(null);
+
+            console.log('Class created and students added successfully');
         } catch (error) {
             console.error(`Could not create class. Error: ${error}`);
             setError(`Could not create class. Error: ${error}`);

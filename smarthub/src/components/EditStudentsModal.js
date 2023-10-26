@@ -29,12 +29,12 @@ function EditStudentsModal({ show, handleClose, handleAdd, handleRemove, current
                     </Form.Group>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                 </Form>
-                <div style={{ maxHeight: '150px', overflowY: 'scroll', marginTop: '10px', border: '1px solid #ccc', padding: '10px' }}>
+                {/* <div style={{ maxHeight: '150px', overflowY: 'scroll', marginTop: '10px', border: '1px solid #ccc', padding: '10px' }}>
                     <h5>Students in this class:</h5>
                     {currentClass && currentClass.studentID.map(id => (
                         <div key={id}>{id}</div>
                     ))}
-                </div>
+                </div> */}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="success" onClick={() => handleAdd(studentIdInput)}>Add Student</Button>

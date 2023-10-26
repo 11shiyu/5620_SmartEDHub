@@ -10,16 +10,35 @@ function ClassManagement() {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        // 假设 fetchClassesFromDB 是一个函数，用于从数据库获取所有班级
-        // const fetchedClasses = await fetchClassesFromDB();
-        // setClasses(fetchedClasses);
 
-        //测试
-        const demoClasses = [
-            { classID: 1, studentID: ['S001','S002','S003','S004'], teacherID: 'T001', className: 'Math 101' },
-            { classID: 1, studentID: ['S005','S006','S007','S008', 'S009'], teacherID: 'T001', className: 'Math 105' },
-        ];
-        setClasses(demoClasses);
+        const fetchClasses = async () => {
+            try {
+              const classListResponse = await fetch('http://localhost:8090/classroom/teacherGetClassroomList?teacherUsername=S005&classname=', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头部
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                }
+              });
+        
+              if (!classListResponse.ok) {
+                throw new Error(`HTTP error! status: ${classListResponse.status}`);
+              }
+        
+              const classData = await classListResponse.json();
+              const classesList = classData.data.map(classItem => ({
+                classID: classItem.classId,
+                className: classItem.classname,
+                teacherName: classItem.username
+              }));
+        
+              setClasses(classesList);
+            } catch (error) {
+              console.error('Failed to fetch classes:', error);
+            }
+        };
+        
+        fetchClasses();
     }, []);
 
     // 假设的API方法，用于创建新的班级
@@ -32,20 +51,6 @@ function ClassManagement() {
 
     const handleBackClick = () => {
         navigate('/ProfileTeacher');
-    };
-
-    const handleCreateClass = (className) => {
-        const newClassData = {
-            classID: Math.random().toString(36).substr(2, 9), // 生成一个随机ID
-            studentID: [],
-            teacherID: 'someTeacherID', // 你可能需要从其他地方获取这个值
-            className: className
-        };
-
-        // 调用应用程序接口在数据库中创建类，然后更新状态
-
-        //测试
-        setClasses([...classes, newClassData]);
     };
 
     return(
@@ -70,7 +75,6 @@ function ClassManagement() {
                             <CreateClassModal 
                                 show={showModal} 
                                 handleClose={() => setShowModal(false)} 
-                                handleCreate={handleCreateClass}
                             />
                         </div>
                     </Col>
