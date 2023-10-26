@@ -59,6 +59,27 @@ class Login extends Component {
         .catch(error => {
           console.error('请求失败', error);
         });
+
+        // get current student detail and storage them into session
+        fetch('http://localhost:8090/getCurrentStudentDetails', {
+          method: 'POST', // 指定请求方法为POST
+          headers: {
+            'Content-Type': 'application/json', // 设置请求头部
+            'Authorization': window.sessionStorage.getItem('tokenStr')
+          },
+        
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('studentInfo:', data); 
+            sessionStorage.setItem("studentInfo", JSON.stringify(data));
+            // const history = useHistory();
+            // history.push('/Home');
+          })
+          .catch(error => {
+            console.error('获取学生信息请求失败', error);
+          });
+      
     }
   }
 

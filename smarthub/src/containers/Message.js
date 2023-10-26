@@ -22,23 +22,38 @@ function Message() {
 
   const [questions, setQuestions] = useState([
     // 示例数据，你可以从API获取真实数据
-    { question_id: 1, question_title: 'Question 1', question_detail: 'Detail for Question 1' },
-    { question_id: 2, question_title: 'Question 2', question_detail: 'Detail for Question 2' },
-    { question_id: 3, question_title: 'Question 3', question_detail: 'Detail for Question 3' },
-    { question_id: 4, question_title: 'Question 4', question_detail: 'Detail for Question 4' },
+    { questionId: 1, questionTitle: 'Question 1', questionDetail: 'Detail for Question 1' },
+    { questionId: 2, questionTitle: 'Question 2', questionDetail: 'Detail for Question 2' },
+    { questionId: 3, questionTitle: 'Question 3', questionDetail: 'Detail for Question 3' },
+    { questionId: 4, questionTitle: 'Question 4', questionDetail: 'Detail for Question 4' },
     
   ]);
 
-  const yourAPI = "";
+  const yourAPI = "http://localhost:8090/question/getQuestionByStudentUsername";
   const [test, setTest] = useState([]);
   useEffect(() => {
       // 假设fetchQuestions是一个异步方法，从数据库获取问题列表
       async function fetchQuestions() {
-          const response = await fetch(yourAPI); // 替换为你实际的API调用
-          const data = await response.json();
-          console.log("testData", data);
-          setTest(test);
-      }
+        try {
+            const response = await fetch(yourAPI, {
+                method: 'GET', // 设置请求方法为POST
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头
+                    'Authorization': window.sessionStorage.getItem('tokenStr')
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json();
+            console.log("testData", data);
+            setQuestions(data); // 假设您想要将返回的数据保存到test状态中
+        } catch (error) {
+            console.error('获取学生题目失败:', error);
+        }
+    }
 
       fetchQuestions();
   }, []);

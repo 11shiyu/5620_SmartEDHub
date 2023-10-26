@@ -37,9 +37,9 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                     titleProperty = 'announcement_title';
                     detailProperty = 'announcement_detail';
                 } else if (currentTab === 'Assessment' || currentTab === 'Favourite' || currentTab === 'CorrectionBook') {
-                    idProperty = 'question_id';
-                    titleProperty = 'question_title';
-                    detailProperty = 'question_detail';
+                    idProperty = 'questionId';
+                    titleProperty = 'questionTitle';
+                    detailProperty = 'questionDetail';
                 }
 
                 return (
