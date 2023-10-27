@@ -2,11 +2,12 @@ import {useEffect, useState} from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import minusImg from '../assets/minus.png';
 
-function CreateClassModal({ show, handleClose, handleCreate }) {
+function CreateClassModal({ show, handleClose, setRefreshTrigger }) {
     const [className, setClassName] = useState('');
     const [studentIdInput, setStudentIdInput] = useState('');
     const [studentsInClass, setStudentsInClass] = useState([]);
     const [error, setError] = useState(null);
+    const teacherUsername = JSON.parse(sessionStorage.getItem('teacherInfo')).username;
 
     useEffect(() => {
         if (!show) {
@@ -51,8 +52,8 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
             if (!createClassResponse.ok) {
                 throw new Error(`HTTP error! status: ${createClassResponse.status}`);
             }
-            //需要更新获取登录的老师用户名
-            const getClassIDResponse = await fetch(`http://localhost:8090/classroom/teacherGetClassroomList?teacherUsername=S005&classname=${className}`, {
+
+            const getClassIDResponse = await fetch(`http://localhost:8090/classroom/teacherGetClassroomList?teacherUsername=${teacherUsername}&classname=${className}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json', // 设置请求头部
@@ -90,7 +91,7 @@ function CreateClassModal({ show, handleClose, handleCreate }) {
                     throw new Error(`HTTP error! status: ${addToClassResponese.status}`);
                 }
             }
-
+            setRefreshTrigger(prev => prev + 1);
             handleClose();
             setClassName('');
             setStudentsInClass([]);

@@ -68,13 +68,13 @@ function ClassList({ classes, setClasses }) {
                     throw new Error(`HTTP error! status: ${addStudentResponse.status}`);
                 }
                 console.log('Add Student Successfully');
-                // const updatedClasses = classes.map(c => {
-                //     if (c.classID === currentClass.classID) {
-                //         return { ...c, studentID: [...c.studentID, studentId] };
-                //     }
-                //     return c;
-                // });
-                //setClasses(updatedClasses);
+                const updatedClasses = classes.map(c => {
+                    if (c.classID === currentClass.classID) {
+                        return { ...c, studentIds: [...c.studentIds, studentId] };
+                    }
+                    return c;
+                });
+                setClasses(updatedClasses);
                 setShowModal(false);
             } catch (error) {
                 console.error(`Could not add student with ID: ${studentId} to class with ID: ${currentClass.classID}. Error: ${error}`);
@@ -86,10 +86,10 @@ function ClassList({ classes, setClasses }) {
     const handleRemoveStudent = async (studentId) => {
         if (currentClass) {
             // 检查班级中是否有该学生
-            // if (!currentClass.studentID.includes(studentId)) {
-            //     setError(`Student with ID ${studentId} does not exist in this class.`);
-            //     return;
-            // }
+            if (!currentClass.studentIds.includes(studentId)) {
+                setError(`Student with ID ${studentId} does not exist in this class.`);
+                return;
+            }
 
             try {
                 const removeStudentResponse = await fetch(`http://localhost:8090/classroom/deleteStudent?classId=${currentClass.classID}&studentId=${studentId}`, {
@@ -103,13 +103,13 @@ function ClassList({ classes, setClasses }) {
                     throw new Error(`HTTP error! status: ${removeStudentResponse.status}`);
                 }
                 console.log('Remove Student Successfully');
-                // const updatedClasses = classes.map(c => {
-                //     if (c.classID === currentClass.classID) {
-                //         return { ...c, studentID: c.studentID.filter(id => id !== studentId) };
-                //     }
-                //     return c;
-                // });
-                // setClasses(updatedClasses);
+                const updatedClasses = classes.map(c => {
+                    if (c.classID === currentClass.classID) {
+                        return { ...c, studentIds: c.studentIds.filter(id => id !== parseInt(studentId)) };
+                    }
+                    return c;
+                });
+                setClasses(updatedClasses);
                 setShowModal(false);
             } catch (error) {
                 console.error(`Could not remove student with ID: ${studentId} to class with ID: ${currentClass.classID}. Error: ${error}`);

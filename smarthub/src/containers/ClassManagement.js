@@ -8,12 +8,40 @@ function ClassManagement() {
     const navigate = useNavigate(); 
     const [classes, setClasses] = useState([]); // 初始化课程数据状态
     const [showModal, setShowModal] = useState(false);
+    const teacherUsername = JSON.parse(sessionStorage.getItem('teacherInfo')).username;
+    const [studentIds, setStudentIds] = useState([]);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    async function fetchClassStudents(classId) {
+        try {
+          const response = await fetch(`http://localhost:8090/classroom/showClassStudent?classId=${classId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json', // 设置请求头部
+                'Authorization': sessionStorage.getItem("tokenStr")
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+      
+          const studentData = await response.json();
+          if (studentData.code === 200 && studentData.data) {
+            // 获取学生 ID 列表
+            const studentIds = studentData.data.map(student => student.studentId);
+            setStudentIds(studentIds);
+          }
+        } catch (error) {
+          console.error('Failed to fetch class students:', error);
+        }
+    }
 
     useEffect(() => {
 
         const fetchClasses = async () => {
             try {
-              const classListResponse = await fetch('http://localhost:8090/classroom/teacherGetClassroomList?teacherUsername=S005&classname=', {
+              const classListResponse = await fetch(`http://localhost:8090/classroom/teacherGetClassroomList?teacherUsername=${teacherUsername}&classname=`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json', // 设置请求头部
@@ -38,13 +66,14 @@ function ClassManagement() {
                 if (!countResponse.ok) {
                     throw new Error(`HTTP error! status: ${countResponse.status}`);
                 }
-
+                fetchClassStudents(classItem.classId);
                 const countStudent = await countResponse.text();
                 return {
                     classID: classItem.classId,
                     className: classItem.classname,
                     teacherName: classItem.username,
-                    countStudent: countStudent
+                    countStudent: countStudent,
+                    studentIds: studentIds
                 };
               }));
               setClasses(classesList);
@@ -54,7 +83,7 @@ function ClassManagement() {
         };
         
         fetchClasses();
-    }, []);
+    }, [refreshTrigger]);
 
     const handleBackClick = () => {
         navigate('/ProfileTeacher');
@@ -82,6 +111,7 @@ function ClassManagement() {
                             <CreateClassModal 
                                 show={showModal} 
                                 handleClose={() => setShowModal(false)} 
+                                setRefreshTrigger={setRefreshTrigger}
                             />
                         </div>
                     </Col>
