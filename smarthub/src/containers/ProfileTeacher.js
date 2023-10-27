@@ -29,7 +29,7 @@ function ProfileTeacher({ teacherData }) {
       } catch (error) {
         console.error('Failed to fetch teacher details:', error);
       }
-  };
+    };
   
     fetchTeacherDetails();
   }, []);
@@ -65,17 +65,17 @@ function ProfileTeacher({ teacherData }) {
             </Col>
           </Row>
 
-          <Row>
-            <Button variant="danger" onClick={() => navigate('/CreateAssignment')}>
+          <Row style={{marginTop: '40px'}}>
+            <Button variant="info" onClick={() => navigate('/CreateAssignment')}>
               Create Assignment
             </Button>
-            <Button variant="danger" onClick={() => navigate('/Grading')} style={{ marginTop: '10px' }}>
+            <Button variant="info" onClick={() => navigate('/Grading')} style={{ marginTop: '15px' }}>
               Grading Assignment
             </Button>
-            <Button variant="danger" onClick={() => navigate('/ClassManagement')} style={{ marginTop: '10px' }}>
+            <Button variant="info" onClick={() => navigate('/ClassManagement')} style={{ marginTop: '15px' }}>
               Class Management
             </Button>
-            <Button variant="danger" onClick={() => navigate('/Announcement')} style={{ marginTop: '10px' }}>
+            <Button variant="info" onClick={() => navigate('/Announcement')} style={{ marginTop: '15px' }}>
               Create Announcement
             </Button>
           </Row>

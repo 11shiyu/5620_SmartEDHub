@@ -19,26 +19,54 @@ function GenerateAssign() {
     const location = useLocation();
     const questionSet = location.state?.formData;
     const questionData = location.state?.questionData;
+    const teacherUsername = JSON.parse(sessionStorage.getItem('teacherInfo')).username;
 
     const [showModal, setShowModal] = useState(false);
     const [classes, setClasses] = useState([]);
+    const [modifiedQuestionData, setModifiedQuestionData] = useState(questionData);
 
-    if(questionData) {
-        console.log(questionData);
-    } else {
-        console.log("Not found questionData")
-    }
+    const fetchClasses = async () => {
+        try {
+            const classListResponse = await fetch(`http://localhost:8090/classroom/teacherGetClassroomList?teacherUsername=${teacherUsername}&classname=`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头部
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                }
+            });
+    
+            if (!classListResponse.ok) {
+                throw new Error(`HTTP error! status: ${classListResponse.status}`);
+            }
+
+            const classData = await classListResponse.json();
+            const classDetail = classData.data.map(classItem => {
+                return {
+                    classname: classItem.classname,
+                    classId: classItem.classId
+                };
+            });
+            setClasses(classDetail);
+        } catch (error) {
+            console.error('Failed to fetch classes:', error);
+        }
+    };
 
     useEffect(() => {
         // 在这里调用API从数据库获取班级信息
-        //fetch
-        //测试
-        const fetchedClasses = [
-            { id: '1', name: 'ClassA' },
-            { id: '2', name: 'ClassB' },
-            { id: '3', name: 'ClassC' },
-        ];
-        setClasses(fetchedClasses);
+        fetchClasses();
+
+        if(questionData) {
+            console.log(questionData);
+
+            if (questionSet.questionType === '2') {
+                setModifiedQuestionData(questionData.data);
+            }
+
+        } else {
+            console.log("Not found questionData")
+        }
+
     }, []);
 
     const handleShowModal = () => setShowModal(true);
@@ -60,19 +88,18 @@ function GenerateAssign() {
                             <div style={{textAlign: 'left', marginTop: '60px'}}>
                                 <p><strong>Subject: </strong> {questionSet.subject}</p>
                                 <p><strong>Level: </strong> {questionSet.level}</p>
-                                <p><strong>Question Type: </strong> {questionSet.questionType}</p>
                                 <p><strong>Requirements: </strong> {questionSet.requirements}</p>
+                                <p><strong>Question Type: </strong> {questionSet.questionType}</p>
 
                             </div>
-                            <div style={{textAlign: 'left', marginTop: '20px'}}>
-                                <p style={{color: '#feae3a'}}><strong>Question Contents: </strong></p>
+                            <div style={{textAlign: 'left', marginTop: '40px'}}>
                                 <div className='questionContent'>
-                                    <h3>{questionData.questionTitle}</h3>
-                                    <p>{questionData.questionDetail}</p>
+                                    <h4 style={{color: '#feae3a'}}><strong>{modifiedQuestionData.questionTitle}</strong></h4>
+                                    <p style={{marginTop: '30px'}}>{modifiedQuestionData.questionDetail}</p>
                                 </div>
                             </div>
                             <div style={{marginBottom: '40px'}}>
-                                <Button variant="warning" onClick={handleCancelClick} style={{marginRight: '5%'}}>Cancel</Button>
+                                <Button variant="secondary" onClick={handleCancelClick} style={{marginRight: '5%'}}>Cancel</Button>
                                 <Button variant="primary" onClick={handleShowModal}>Confirmed</Button>
                                 <SelectClassModal 
                                     show={showModal} 

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'; 
 
 function SelectClassModal({ show, handleClose, classes, questionId }) {
     const [selectedClass, setSelectedClass] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async () => {
         try {
@@ -22,6 +24,7 @@ function SelectClassModal({ show, handleClose, classes, questionId }) {
             console.error('Failed to distribute question:', error);
         }
         handleClose();
+        navigate('/ProfileTeacher');
     };
 
     return(
@@ -34,12 +37,12 @@ function SelectClassModal({ show, handleClose, classes, questionId }) {
                 <Form>
                     {classes.map((classItem) => (
                         <Form.Check
-                            key={classItem.id}
+                            key={classItem.classId}
                             type="radio"
-                            label={classItem.name}
+                            label={classItem.classname}
                             name="classGroup"
                             id={classItem.id}
-                            onChange={() => setSelectedClass(classItem.id)}
+                            onChange={() => setSelectedClass(classItem.classId)}
                         />
                     ))}
                 </Form>

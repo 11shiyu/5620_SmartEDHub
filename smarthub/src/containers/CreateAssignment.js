@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function CreateAssignment() {
     
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleBackClick = () => {
         navigate('/ProfileTeacher'); 
@@ -27,6 +28,7 @@ function CreateAssignment() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         //如果requirements内容为空，就删掉他
         const updatedFormData = {...formData};
@@ -56,6 +58,8 @@ function CreateAssignment() {
 
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
+        } finally {
+            setIsLoading(false); // 结束加载
         }
         
     };
@@ -145,6 +149,13 @@ function CreateAssignment() {
                                     Submit
                                 </Button>
                             </Form>
+                        </div>
+                        <div>
+                            {isLoading && (
+                                <div className="overlay">
+                                    <div className="loader"></div>
+                                </div>
+                            )}
                         </div>
                     </Col>
                 </Row>
