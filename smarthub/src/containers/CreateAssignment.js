@@ -11,10 +11,10 @@ function CreateAssignment() {
     };
 
     const [formData, setFormData] = useState({
-        subject: '',
         level: '',
         questionType: '',
-        requirements: ''
+        requirements: '',
+        subject: ''
     });
 
     const handleChange = (e) => {
@@ -49,14 +49,15 @@ function CreateAssignment() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data = await response.json();
-            console.log('Form Data Submitted:', data);
+            const questionData = await response.json();
+            console.log('Form Data Submitted:', questionData);
+
+            navigate('/GenerateAssign', { state: { formData: formData, questionData: questionData.data } });
 
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         }
-        //页面跳转
-        navigate('/GenerateAssign', { state: { formData } });
+        
     };
 
     return (

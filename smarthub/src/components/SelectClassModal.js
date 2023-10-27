@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
-function SelectClassModal({ show, handleClose, classes }) {
+function SelectClassModal({ show, handleClose, classes, questionId }) {
     const [selectedClass, setSelectedClass] = useState('');
 
-    const handleSubmit = () => {
-        console.log('Selected class:', selectedClass);
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch(`http://localhost:8090/question/allocateQuestion?classId=${selectedClass}&questionId=${questionId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log('Successful distribution');
+        } catch (error) {
+            console.error('Failed to distribute question:', error);
+        }
         handleClose();
     };
 

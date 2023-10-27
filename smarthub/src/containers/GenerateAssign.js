@@ -17,10 +17,17 @@ function GenerateAssign() {
     };
 
     const location = useLocation();
-    const questionSet = location.state.formData;
+    const questionSet = location.state?.formData;
+    const questionData = location.state?.questionData;
 
     const [showModal, setShowModal] = useState(false);
     const [classes, setClasses] = useState([]);
+
+    if(questionData) {
+        console.log(questionData);
+    } else {
+        console.log("Not found questionData")
+    }
 
     useEffect(() => {
         // 在这里调用API从数据库获取班级信息
@@ -60,13 +67,19 @@ function GenerateAssign() {
                             <div style={{textAlign: 'left', marginTop: '20px'}}>
                                 <p style={{color: '#feae3a'}}><strong>Question Contents: </strong></p>
                                 <div className='questionContent'>
-                                    <p></p>
+                                    <h3>{questionData.questionTitle}</h3>
+                                    <p>{questionData.questionDetail}</p>
                                 </div>
                             </div>
                             <div style={{marginBottom: '40px'}}>
                                 <Button variant="warning" onClick={handleCancelClick} style={{marginRight: '5%'}}>Cancel</Button>
                                 <Button variant="primary" onClick={handleShowModal}>Confirmed</Button>
-                                <SelectClassModal show={showModal} handleClose={handleCloseModal} classes={classes} />
+                                <SelectClassModal 
+                                    show={showModal} 
+                                    handleClose={handleCloseModal} 
+                                    classes={classes} 
+                                    questionId={questionData.questionId}
+                                />
                             </div>
                         </div>
                     </Col>
