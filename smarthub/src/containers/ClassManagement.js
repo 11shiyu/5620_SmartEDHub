@@ -90,7 +90,7 @@ function ClassManagement() {
     };
 
     return(
-        <div style={{marginTop: '15px'}}>
+        <div style={{marginTop: '1vw'}}>
             <Container fluid>
                 <Row>
                     <Col md={1}>
@@ -107,7 +107,7 @@ function ClassManagement() {
                     </Col>
                     <Col md={2} >
                         <div>
-                            <Button onClick={() => setShowModal(true)}>Add Class</Button>
+                            <Button variant="warning" onClick={() => setShowModal(true)}>Add Class</Button>
                             <CreateClassModal 
                                 show={showModal} 
                                 handleClose={() => setShowModal(false)} 

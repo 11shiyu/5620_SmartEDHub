@@ -65,7 +65,7 @@ function CreateAssignment() {
     };
 
     return (
-        <div style={{marginTop: '15px'}}>
+        <div style={{marginTop: '1vw'}}>
             <Container fluid>
                 <Row>
                     <Col md={1}>
@@ -78,7 +78,7 @@ function CreateAssignment() {
                         <div className='CreateAssignment'>
                             <h2>Create Assignment By AI</h2>
                             <Form onSubmit={handleSubmit}>
-                                <Row style={{marginTop: '60px'}}>
+                                <Row style={{marginTop: '4vw'}}>
                                     <Form.Group as={Col} controlId="formGridSubject">
                                         <Form.Label style={{color: '#feae3a'}}>Subject*</Form.Label>
                                         <Form.Control 
@@ -134,18 +134,18 @@ function CreateAssignment() {
                                     </Form.Group>
                                 </Row>
 
-                                <Form.Group controlId="formGridRequirements" style={{marginTop: '100px'}}>
+                                <Form.Group controlId="formGridRequirements" style={{marginTop: '8vw'}}>
                                     <Form.Label style={{color: '#feae3a'}}>Question Requirement (Optional)</Form.Label>
                                     <Form.Control 
                                         as="textarea" 
-                                        rows={3} 
+                                        rows={5} 
                                         name="requirements" 
                                         value={formData.requirements} 
                                         onChange={handleChange}
                                     />
                                 </Form.Group>
 
-                                <Button variant="primary" type="submit" style={{marginTop: '120px'}}>
+                                <Button variant="primary" type="submit" style={{marginTop: '8vw', marginBottom: '3vw'}}>
                                     Submit
                                 </Button>
                             </Form>
