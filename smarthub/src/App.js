@@ -16,6 +16,7 @@ import ClassManagement from './containers/ClassManagement';
 import Register from './containers/Register';
 import Login from './containers/Login';
 import GenerateAssign from './containers/GenerateAssign';
+import Announcement from './containers/Announcement';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/GenerateAssign" element={<GenerateAssign />} />
+          <Route path="/Announcement" element={<Announcement />} />
         </Routes>
       </div>
     </Router>

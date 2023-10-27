@@ -2,29 +2,63 @@ import { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import EditStudentsModal from './EditStudentsModal';
 
-//用于从数据库删除特定ID的课程
-const deleteClassFromDB = async (id) => {
-    try {
-        const response = await fetch(`http://localhost:8090/classroom/deleteClassroom?classroomId=${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json', // 设置请求头部
-                'Authorization': sessionStorage.getItem("tokenStr")
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        console.log(`Deleted class with ID: ${id}`);
-    } catch (error) {
-        console.error(`Could not delete class with ID: ${id}. Error: ${error}`);
-    }
-};
   
 function ClassList({ classes, setClasses }) { 
     const [showModal, setShowModal] = useState(false);
     const [currentClass, setCurrentClass] = useState(null);
     const [error, setError] = useState(null);
+
+    //用于从数据库删除特定ID的课程
+    const deleteClassFromDB = async (id) => {
+        try {
+            const studentInClassResponse = await fetch(`http://localhost:8090/classroom/showClassStudent?classId=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                },
+            });
+    
+            if (!studentInClassResponse.ok) {
+                throw new Error(`HTTP error! status: ${studentInClassResponse.status}`);
+            }
+    
+            const studentInClassdata = await studentInClassResponse.json();
+            const studentIds = studentInClassdata.data.map(student => student.studentId);
+    
+            for (const studentId of studentIds) {
+                try {
+                    const removeStudentResponse = await fetch(`http://localhost:8090/classroom/deleteStudent?classId=${id}&studentId=${studentId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': sessionStorage.getItem("tokenStr")
+                        },
+                    });
+                    if (!removeStudentResponse.ok) {
+                        throw new Error(`HTTP error! status: ${removeStudentResponse.status}`);
+                    }
+                } catch (error) {
+                    console.error(`Could not remove student with ID: ${studentId} to class with ID: ${currentClass.classID}. Error: ${error}`);
+                    setError(`Could not remove student with ID: ${studentId} to class. Please try again later.`);
+                }
+            }
+    
+            const deleteResponse = await fetch(`http://localhost:8090/classroom/deleteClassroom?classroomId=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头部
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                },
+            });
+            if (!deleteResponse.ok) {
+                throw new Error(`HTTP error! status: ${deleteResponse.status}`);
+            }
+            console.log(`Deleted class with ID: ${id}`);
+        } catch (error) {
+            console.error(`Could not delete class with ID: ${id}. Error: ${error}`);
+        }
+    };
 
     const checkStudentExistsInDB = async (studentId) => {
         // 在这里调用API来查询数据库中的学生ID, 通过返回一个布尔值，判断学生是否存在
