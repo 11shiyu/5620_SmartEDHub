@@ -23,7 +23,6 @@ function ProfileTeacher({ teacherData }) {
         }
   
         const data = await response.json();
-        console.log('Teacher Info:', data);
   
         sessionStorage.setItem('teacherInfo', JSON.stringify(data));
   

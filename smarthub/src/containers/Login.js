@@ -79,26 +79,6 @@ class Login extends Component {
           .catch(error => {
             console.error('获取学生信息请求失败', error);
           });
-
-        fetch('http://localhost:8090/getCurrentTeacherDetails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json', // 设置请求头部
-            'Authorization': window.sessionStorage.getItem('tokenStr')
-          },
-    
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('teacherInfo:', data); 
-            sessionStorage.setItem("teacherInfo", JSON.stringify(data));
-            // const history = useHistory();
-            // history.push('/Home');
-          })
-          .catch(error => {
-            console.error('获取老师信息请求失败', error);
-          });
-      
     }
   }
 
