@@ -32,9 +32,9 @@ function Message() {
   const studentId = JSON.parse(sessionStorage.getItem('studentInfo')).studentId
   //const classId = JSON.parse(sessionStorage.getItem('studentInfo')).classId
   const announcementTitle = "";
-  console.log('student id is :', studentId)
-  //console.log('student class id is :', JSON.parse(sessionStorage.getItem('studentInfo')))
-  const questionAPI = "http://localhost:8090/question/getAllQuestion";
+  //console.log('student id is :', studentId)
+  //console.log('student info is :', JSON.parse(sessionStorage.getItem('studentInfo')))
+  const questionAPI = `http://localhost:8090/question/studentGetQuestion?studentId=${studentId}`;
   const announcemenntAPI = `http://localhost:8090/announcement/showAnnouncementByStudentId?studentId=${studentId}&announcementTitle=${announcementTitle}`;
   const allAnnouncemenntAPI = `http://localhost:8090/announcement/showAllOrSpecificAnnouncement`;
   useEffect(() => {
@@ -54,8 +54,8 @@ function Message() {
             }
 
             const data = await response.json();
-            console.log("questionData", data.data.rows);
-            setQuestions(data.data.rows); // 假设您想要将返回的数据保存到test状态中
+            console.log("questionData", data.data);
+            setQuestions(data.data); // 假设您想要将返回的数据保存到test状态中
         } catch (error) {
             console.error('获取学生题目失败:', error);
         }
