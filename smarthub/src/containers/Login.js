@@ -11,6 +11,7 @@ class Login extends Component {
       password: '',
       errorMessage: '',
       isVisible: false,
+      role: 'student',
     };
   }
 
@@ -20,7 +21,12 @@ class Login extends Component {
       this.hideNotification();
     }, 5000);
   }
-
+  
+  handleInputChange = (e) => {
+      console.log(e.target.value);
+      this.setState({ role: e.target.value });
+     }
+    
   hideNotification = () => {
     this.setState({ isVisible: false });
   }
@@ -53,8 +59,13 @@ class Login extends Component {
         .then(data => {
           console.log(data); 
           sessionStorage.setItem("tokenStr", data.data.tokenHead+data.data.token);
-          // const history = useHistory();
-          // history.push('/Home');
+          if(this.state.role==='student'){
+            sessionStorage.setItem("role",1);
+          }else if(this.state.role==='teacher'){
+            sessionStorage.setItem("role",2);
+          }else{
+            sessionStorage.setItem("role",3);
+          }
         })
         .catch(error => {
           console.error('请求失败', error);
@@ -135,6 +146,27 @@ class Login extends Component {
         <div>
           <p>Not have an account? <Link to="/Register">Register</Link></p>
         </div>
+        <label>Role:</label>
+            <input
+              type="radio"
+              name="role"
+              value="student"
+              checked={this.state.role === 'student'}
+              onChange={this.handleInputChange}
+              style={{marginLeft:"28px"}}
+            />
+            <span>Student</span>
+            <input
+              type="radio"
+              name="role"
+              value="teacher"
+              checked={this.state.role === 'teacher'}
+              onChange={this.handleInputChange}
+              style={{marginLeft:"28px"}}
+            />
+            <span>Teacher</span>
+
+
         <div>
             {this.state.isVisible && (
             <div className="notification-box" style={notice}>
@@ -143,6 +175,15 @@ class Login extends Component {
             </div>
             )}
         </div>
+        <input
+              type="radio"
+              name="role"
+              value="admin"
+              checked={this.state.role === 'admin'}
+              onChange={this.handleInputChange}
+              style={{right:"3px",bottom:"5px",position:"fixed" }}
+            />
+            <span style={{bottom:'0',right:"20px",position:"fixed" }}>Admin</span>
     </div>
     );
   }

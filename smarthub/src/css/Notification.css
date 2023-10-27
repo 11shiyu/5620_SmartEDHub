@@ -1,0 +1,21 @@
+.notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #0074D9;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    z-index: 99;
+  }
+  
+  .notification button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+    display: none;
+  }
+  

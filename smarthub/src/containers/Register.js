@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Notification from '../components/Notification';
 
 
 class Register extends Component {
@@ -12,12 +13,18 @@ class Register extends Component {
       mobile: '',
       gender: 'male', // 默认性别选择
       role: 'student', // 默认角色选择
+      notificationMessage: null,
     };
   }
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  }
+
+  handleNotification = (message) => {
+    this.setState({ notificationMessage: message });
+    console.log("11");
   }
 
   handleSubmit = (e) => {
@@ -40,20 +47,53 @@ class Register extends Component {
         .then(response => response.json())
         .then(data => {
           console.log(data); 
+         if(data.code ===500){
+          this.handleNotification('Please change a username!');
+         }
          
+        })
+        .catch(error => {
+          console.error('请求失败', error);
+          console.log(error);
+            
+          
+        });
+    }else{
+      fetch('http://localhost:8090/teacherRegister', {
+        method: 'POST', // 指定请求方法为POST
+        headers: {
+          'Content-Type': 'application/json', // 设置请求头部
+        },
+        body: JSON.stringify({
+          "realName": this.state.realName,
+          "username": this.state.username,
+          "password": this.state.password,
+          "email": this.state.email,
+          "mobile": this.state.mobile,
+          "gender": this.state.gender, // 默认性别选择
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); 
+          if(data.code ===500){
+            this.handleNotification('Please change a username!');
+           }
           // const history = useHistory();
           // history.push('/Home');
         })
         .catch(error => {
           console.error('请求失败', error);
+          if(error.code == 500){
+            this.handleNotification('Please change a username!');
+          }
         });
-    }else{
-
+        
     }
-    // 在这里添加注册逻辑，可以将用户输入的数据发送到后端进行注册
+
     
 
-    // 清空表单字段
+  
     this.setState({
       realName: '',
       username: '',
@@ -65,6 +105,7 @@ class Register extends Component {
 
   render() {
     return (
+      
       <div>
         <h2 style={{marginTop:'130px'}}>Register</h2>
         <form onSubmit={this.handleSubmit}>
@@ -161,6 +202,15 @@ class Register extends Component {
           </div>
           <button type="submit" style={{marginTop:"20px"}}>Register</button>
         </form>
+        <div>
+        {/* ...其他内容... */}
+        {this.state.notificationMessage && (
+          <Notification
+            message={this.state.notificationMessage}
+            onClose={() => this.setState({ notificationMessage: null })}
+          />
+        )}
+      </div>
       </div>
     );
   }
