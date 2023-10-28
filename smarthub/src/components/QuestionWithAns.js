@@ -5,6 +5,7 @@ function QuestionWithAns({show, handleClose, questionId}) {
     const [questionContent, setQuestionContent] = useState({});
     const [answer, setAnswer] = useState('');
     const questionID = parseInt(questionId);
+    const studentId = parseInt(JSON.parse(sessionStorage.getItem('studentInfo')).studentId);
 
     const fetchQuestion = async () => {
         try {
@@ -47,6 +48,23 @@ function QuestionWithAns({show, handleClose, questionId}) {
 
     const handleSubmit = async () => {
         //调用传答案的接口
+        try {
+            const response = await fetch(`http:8090//localhost:8090/question/studentAnswer?answer=${answer}&questionId=${questionID}&studentId=${studentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头部
+                    'Authorization': sessionStorage.getItem("tokenStr")
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            handleClose();
+        } catch (error) {
+            console.error('Failed to submit answer:', error);
+        }
     };
 
     return(

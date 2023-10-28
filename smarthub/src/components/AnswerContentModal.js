@@ -4,10 +4,12 @@ import { Modal, Button, Form } from 'react-bootstrap';
 function AnswerContentModal({show, handleClose, answerData}) {
     const [markScore, setMarkScore] = useState('');
     const [questionContent, setQuestionContent] = useState({});
+    const questionId = parseInt(answerData.questionId);
+    console.log(questionId);
 
     const fetchQuestion = async () => {
         try {
-            const response = await fetch(`http://localhost:8090/question/getQuestionById?questionId=${answerData.questionId}`, {
+            const response = await fetch(`http://localhost:8090/question/getQuestionById?questionId=${questionId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // 设置请求头部
@@ -32,19 +34,16 @@ function AnswerContentModal({show, handleClose, answerData}) {
     useEffect(() => {
         if (!show) {
             setMarkScore('');
-            setQuestionContent({});
+        } else {
+            fetchQuestion();
+
+            if(questionContent) {
+                console.log(questionContent);
+            } else {
+                console.log("Not found questionContent");
+            }
         }
     }, [show]);
-
-    useEffect(() => {
-        fetchQuestion();
-
-        if(questionContent) {
-            console.log(questionContent);
-        } else {
-            console.log("Not found questionContent");
-        }
-    }, [])
 
     const handleSubmit = async () => {
         const markScoreInt = parseInt(markScore);
@@ -83,7 +82,7 @@ function AnswerContentModal({show, handleClose, answerData}) {
                 </div>
                 <Form style={{marginTop: '50px'}}>
                     <Form.Group>
-                        <Form.Label>Score:</Form.Label>
+                        <Form.Label>Mark Score:</Form.Label>
                         <Form.Control 
                             type="text" 
                             value={markScore} 
