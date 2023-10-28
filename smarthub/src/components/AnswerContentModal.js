@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-function AnswerContentModal(show, handleClose, ansListData) {
+function AnswerContentModal({show, handleClose, answerData}) {
     const [markScore, setMarkScore] = useState('');
     const [questionContent, setQuestionContent] = useState({});
 
     const fetchQuestion = async () => {
         try {
-            const response = await fetch(`http://localhost:8090/question/getQuestionById?questionId=${ansListData.questionId}`, {
+            const response = await fetch(`http://localhost:8090/question/getQuestionById?questionId=${answerData.questionId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // 设置请求头部
@@ -29,6 +29,12 @@ function AnswerContentModal(show, handleClose, ansListData) {
             console.error('Failed to fetch question:', error);
         }
     };
+    useEffect(() => {
+        if (!show) {
+            setMarkScore('');
+            setQuestionContent({});
+        }
+    }, [show]);
 
     useEffect(() => {
         fetchQuestion();
@@ -40,11 +46,10 @@ function AnswerContentModal(show, handleClose, ansListData) {
         }
     }, [])
 
-
     const handleSubmit = async () => {
         const markScoreInt = parseInt(markScore);
         try {
-            const response = await fetch(`http://localhost:8090/question/teacherMark?mark=${markScoreInt}&question_student_id=${ansListData.questionStudentId}`, {
+            const response = await fetch(`http://localhost:8090/question/teacherMark?mark=${markScoreInt}&question_student_id=${answerData.questionStudentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,13 +60,13 @@ function AnswerContentModal(show, handleClose, ansListData) {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
             console.log('Mark successfully')
+            handleClose();
         } catch (error) {
             console.error('Failed to mark the answer:', error);
         }
-        handleClose();
     }
+    
 
     return (
         <Modal show={show} onHide={handleClose}>
@@ -74,7 +79,7 @@ function AnswerContentModal(show, handleClose, ansListData) {
                     <p style={{marginTop: '30px'}}>{questionContent.questionDetail}</p>
                 </div>
                 <div style={{marginTop: '50px'}}>
-                    <p><strong>Student Answer: </strong>{ansListData.questionAnswer}</p>
+                    <p><strong>Student Answer: </strong> {answerData.questionAnswer}</p>
                 </div>
                 <Form style={{marginTop: '50px'}}>
                     <Form.Group>
@@ -93,7 +98,7 @@ function AnswerContentModal(show, handleClose, ansListData) {
                 <Button variant="primary" onClick={handleSubmit}>Mark</Button>
             </Modal.Footer>
         </Modal>
-    )
+    );
 }
 
 export default AnswerContentModal;

@@ -4,6 +4,12 @@ import AnswerContentModal from './AnswerContentModal';
 
 function AnswerList({ansListData, setAnsListData}) {
     const [showModal, setShowModal] = useState(false);
+    const [currentAns, setCurrentAns] = useState({});
+
+    const handleEdit = (answerItem) => {
+        setCurrentAns(answerItem);
+        setShowModal(true);
+    };
 
     return (
         <div>
@@ -15,7 +21,7 @@ function AnswerList({ansListData, setAnsListData}) {
                             <strong>Question ID: </strong>{answerItem.questionId} <br/>
                             <strong>Student ID: </strong>{answerItem.studentId} <br/>
                         </Card.Text>
-                        <Button variant='primary'>Mark</Button>
+                        <Button variant='primary' onClick={() => handleEdit(answerItem)}>Mark</Button>
                     </Card.Body>
                 </Card>
             ))}
@@ -23,7 +29,7 @@ function AnswerList({ansListData, setAnsListData}) {
             <AnswerContentModal
                 show={showModal}
                 handleClose={() => setShowModal(false)}
-                ansListData={ansListData}
+                answerData={currentAns}
             />
         </div>
     );
