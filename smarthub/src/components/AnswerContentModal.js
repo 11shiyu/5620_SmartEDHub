@@ -5,7 +5,6 @@ function AnswerContentModal({show, handleClose, answerData}) {
     const [markScore, setMarkScore] = useState('');
     const [questionContent, setQuestionContent] = useState({});
     const questionId = parseInt(answerData.questionId);
-    console.log(questionId);
 
     const fetchQuestion = async () => {
         try {
