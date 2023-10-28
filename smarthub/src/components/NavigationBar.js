@@ -14,7 +14,8 @@ const NavigationBar = () => {
                         <Nav.Link as={Link} to="/Message">Message</Nav.Link>
                         <Nav.Link as={Link} to="/ProfileStudent">Student Profile</Nav.Link>
                         <Nav.Link as={Link} to="/ProfileTeacher">Teacher Profile</Nav.Link>    
-                        <Nav.Link as={Link} to="/Login">Login</Nav.Link>         
+                        <Nav.Link as={Link} to="/Login">Login</Nav.Link>
+                        <Nav.Link as={Link} to="/AdminPanel">AdminPanel</Nav.Link>             
                     </Nav>
                 </Navbar.Collapse>
             </Container>
