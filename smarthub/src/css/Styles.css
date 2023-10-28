@@ -88,7 +88,38 @@ th, td {
     padding: 10px;
 }
 
-.btn {
+
+.btn-enabled {
+    background-color: blue;
+    color: white;
     padding: 5px 10px;
     cursor: pointer;
+}
+
+.btn-disabled {
+    background-color: white;
+    border: 1px solid blue;
+    color: blue;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    color: white;
+    background-color: red;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 4px;
+    transition-duration: 0.4s;
+}
+
+.btn-delete:hover {
+    background-color: darkred;
+    color: white;
 }
