@@ -1,0 +1,58 @@
+.radioOptions{
+    position: relative;
+    margin-top: 40px;
+    width: 80%;
+    height: 60px;
+    margin-left: 10%;
+    font-size: 22px;
+}
+.AI{
+    position: relative;
+    width: 80%;
+    left: 10%;
+    height: 230px;
+    border: 1px solid rgb(169, 0, 0);
+    text-align: start;
+    font-size: 14px;
+    padding: 20px;
+}
+
+.textInput{
+    position: relative;
+    margin-top: 20px;
+    width: 70%;
+    
+    height: 180px;
+    border: 1px solid rgb(0, 161, 105);
+}
+
+.languageInput{
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+    height: 20px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.submitCont{
+    position: relative;
+    margin-top: 20px;
+    height: 40px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.submit{
+    position: relative;
+    
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+    
+    border: 1px solid rgb(180, 0, 0);
+    border-radius: 10px;
+    line-height: 40px;
+}
