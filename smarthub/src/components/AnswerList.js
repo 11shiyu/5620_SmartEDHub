@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
-import EditStudentsModal from './EditStudentsModal';
+import AnswerContentModal from './AnswerContentModal';
 
 function AnswerList({ansListData, setAnsListData}) {
-
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <div>
@@ -19,6 +19,12 @@ function AnswerList({ansListData, setAnsListData}) {
                     </Card.Body>
                 </Card>
             ))}
+
+            <AnswerContentModal
+                show={showModal}
+                handleClose={() => setShowModal(false)}
+                ansListData={ansListData}
+            />
         </div>
     );
 }
