@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import teacherImage from '../assets/teacher.png';
@@ -6,33 +6,6 @@ import teacherImage from '../assets/teacher.png';
 function ProfileTeacher({ teacherData }) {
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchTeacherDetails = async () => {
-      try {
-        const response = await fetch('http://localhost:8090/getCurrentTeacherDetails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem("tokenStr")
-          }
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const data = await response.json();
-  
-        sessionStorage.setItem('teacherInfo', JSON.stringify(data));
-  
-      } catch (error) {
-        console.error('Failed to fetch teacher details:', error);
-      }
-    };
-  
-    fetchTeacherDetails();
-  }, []);
 
   return (
     <div style={{ padding: '20px' }}>

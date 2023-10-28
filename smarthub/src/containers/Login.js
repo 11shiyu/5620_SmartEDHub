@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 //import { useHistory } from 'react-router-dom';
 //import axios from '../axiosConfig'; 
@@ -14,7 +14,7 @@ class Login extends Component {
       role: 'student',
     };
   }
-
+  
   showNotification = (message) => {
     this.setState({ message, isVisible: true });
     setTimeout(() => {
@@ -40,7 +40,7 @@ class Login extends Component {
   }
 
   handleLogin = () => {
-    
+
     const { username, password } = this.state;
     if (username === '' || password === '') {
         this.showNotification('Please input all the information!')
@@ -82,6 +82,22 @@ class Login extends Component {
             });
           }else if(this.state.role==='teacher'){
             sessionStorage.setItem("role",2);
+            fetch('http://localhost:8090/getCurrentTeacherDetails', {
+              method: 'POST', // 指定请求方法为POST
+              headers: {
+                'Content-Type': 'application/json', // 设置请求头部
+                'Authorization': window.sessionStorage.getItem('tokenStr')
+              },
+            
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log('teacherInfo:', data); 
+              sessionStorage.setItem("teacherInfo", JSON.stringify(data));
+            })
+            .catch(error => {
+              console.error('获取老师信息请求失败', error);
+            });
           }else{
             sessionStorage.setItem("role",3);
           }
