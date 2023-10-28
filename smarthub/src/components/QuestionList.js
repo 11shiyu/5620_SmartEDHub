@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
+import QuestionWithoutAns from './QuestionWithoutAns';
 
 // 假设的API方法，用于从数据库删除特定ID的题目
 const deleteQuestionFromDB = async (id) => {
@@ -24,8 +25,23 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
         }
         //const updatedQuestions = questions.filter(q => q.question_id !== id);
         setQuestions(updatedQuestions);
-      };
+    };
 
+    const [showModal, setShowModal] = useState(false);
+    const [error, setError] = useState(null);
+    const handleClose = () => {
+        setShowModal(false);
+        setError(null); // 清空错误消息
+    };
+    const [currentQuestionId, setCurrentQuestionId] = useState(null);  // 新状态，用于保存当前选中的questionId
+    const [currentTitle, setCurrentTitle] = useState('');  // 新状态，用于保存当前选中的questionTitle
+    const [currentDetail, setCurrentDetail] = useState('');  // 新状态，用于保存当前选中的questionDetail
+
+    const handleClick = (title, detail) => {
+        setCurrentTitle(title);  // 设置当前选中的questionTitle
+        setCurrentDetail(detail);  // 设置当前选中的questionDetail
+        setShowModal(true);  // 显示模态框
+    };
 
     return (
         <div>
@@ -43,13 +59,21 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                 }
 
                 return (
-                    <Card key={question[idProperty]} style={{ marginBottom: '20px' }}>
-                        <Card.Body>
-                            <Card.Title>{question[titleProperty]}</Card.Title>
-                            <Card.Text>{question[detailProperty]}</Card.Text>
-                            <Button variant="danger" onClick={() => handleDelete(question[idProperty])}>delete</Button>
-                        </Card.Body>
-                    </Card>
+                    <div>
+                        <Card key={question[idProperty]} style={{ marginBottom: '20px' }}>
+                            <Card.Body>
+                                <Card.Title onClick={() => handleClick(question[titleProperty], question[detailProperty])}>{question[titleProperty]}</Card.Title>
+                                <Card.Text>{question[detailProperty]}</Card.Text>
+                                <Button variant="danger" onClick={() => handleDelete(question[idProperty])}>delete</Button>
+                            </Card.Body>
+                        </Card>
+                        <QuestionWithoutAns
+                        show={showModal} 
+                        handleClose={() => setShowModal(false)}
+                        questionTitle={currentTitle}  // 将当前选中的questionTitle传递给模态框
+                        questionDetail={currentDetail} // 将当前选中的questionDetail传递给模态框
+                        />
+                    </div>
                 );
             })}
         </div>
