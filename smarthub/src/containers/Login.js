@@ -40,7 +40,7 @@ class Login extends Component {
   }
 
   handleLogin = () => {
-    isLoggedInState = false;
+
     const { username, password } = this.state;
     if (username === '' || password === '') {
         this.showNotification('Please input all the information!')
