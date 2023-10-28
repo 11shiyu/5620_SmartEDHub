@@ -20,15 +20,65 @@ function CorrectionBook() {
     
   ]);
 
-  // useEffect(() => {
-  //     // 假设fetchQuestions是一个异步方法，从数据库获取问题列表
-  //     async function fetchQuestions() {
-  //         const data = await yourAPI.getQuestions(); // 替换为你实际的API调用
-  //         setQuestions(data);
-  //     }
+  const username = JSON.parse(sessionStorage.getItem('studentInfo')).username;
+  console.log('student name is :', username)
+  const correctionBookAPI = `http://localhost:8090/correction-notebook/listCorrectionNote?username=${username}`;
+  useEffect(() => {
+      // 假设fetchQuestions是一个异步方法，从数据库获取问题列表
+      async function fetchCorrectionBook() {
+        try {
+            const response = await fetch(correctionBookAPI, {
+                method: 'GET', // 设置请求方法为POST
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头
+                    'Authorization': window.sessionStorage.getItem('tokenStr')
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
 
-  //     fetchQuestions();
-  // }, []);
+            const data = await response.json();
+            console.log("coorrectionBookData", data.data);
+
+            const allQuestionDetails = [];
+            await Promise.all(data.data.map(async (question) => {
+              //console.log("questionID:", question.questionId);
+              const questionDetail = await fetchQuestionDetail(question.questionId);
+              allQuestionDetails.push(questionDetail);  // 将每个新的题目详情添加到数组中
+            }));
+
+            setQuestions(allQuestionDetails); // 假设您想要将返回的数据保存到test状态中
+        } catch (error) {
+            console.error('获取学生favourite失败:', error);
+        }
+    }
+
+
+    async function fetchQuestionDetail(questionId) {
+      const response = await fetch(`http://localhost:8090/question/getQuestionById?questionId=${questionId}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': window.sessionStorage.getItem('tokenStr')
+          },
+      });
+      if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+      }
+      const data = await response.json();
+      return {
+          questionId: data.data.questionId,
+          questionTitle: data.data.questionTitle,
+          questionDetail: data.data.questionDetail,
+          // ...其他你需要的字段
+      };
+  }
+
+
+    fetchCorrectionBook();
+  }, []);
 
   const handleBackClick = () => {
     navigate('/ProfileStudent');  // 导航到StudentProfile页面
