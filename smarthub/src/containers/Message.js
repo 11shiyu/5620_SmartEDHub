@@ -88,7 +88,7 @@ function Message() {
   }, []);
 
   return (
-    <div>
+    <div style={{marginTop: '1vw'}}>
       <Container fluid>
         <Row>
           {/* 左侧区域 */}
@@ -116,7 +116,7 @@ function Message() {
           </Col>
 
           {/* 右侧区域 */}
-          <Col md={9}>
+          <Col md={{span: 6, offset: 1}}>
             <div className="py-3">
               <h3>{currentTab} List</h3>
 
