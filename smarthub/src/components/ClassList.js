@@ -119,11 +119,6 @@ function ClassList({ classes, setClasses }) {
 
     const handleRemoveStudent = async (studentId) => {
         if (currentClass) {
-            // 检查班级中是否有该学生
-            if (!currentClass.studentIds.includes(studentId)) {
-                setError(`Student with ID ${studentId} does not exist in this class.`);
-                return;
-            }
 
             try {
                 const removeStudentResponse = await fetch(`http://localhost:8090/classroom/deleteStudent?classId=${currentClass.classID}&studentId=${studentId}`, {
