@@ -39,14 +39,45 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
     const [currentDetail, setCurrentDetail] = useState('');  // 新状态，用于保存当前选中的questionDetail
     const [currentId, setCurrentId] = useState(null);
     const username = JSON.parse(sessionStorage.getItem('studentInfo')).username
+    const studentId = JSON.parse(sessionStorage.getItem('studentInfo')).studentId
+    const [mark, setMark] = useState(null);
+
 
 
     const handleClick = (id, title, detail) => {
+        setMark(null);
         setCurrentTitle(title);  // 设置当前选中的questionTitle
         setCurrentDetail(detail);  // 设置当前选中的questionDetail
         setShowModal(true);  // 显示模态框
         setCurrentId(id);
+        showMarks(id)
     };
+
+    async function showMarks(id) {
+        try {
+            const response = await fetch(`http://localhost:8090/question/studetGetMark?questionId=${id}&username=${studentId}`, {
+                method: 'GET', // 设置请求方法为POST
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头
+                    'Authorization': window.sessionStorage.getItem('tokenStr')
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("marks Data", data);
+                setMark(data);
+            } else {
+                setMark(null);
+            }
+
+
+            //setAnnouncements(data.data); // 假设您想要将返回的数据保存到test状态中
+        } catch (error) {
+            console.error('获取marks 失败:', error);
+            setMark(null);
+        }
+    }
 
     async function addToFavourites(id) {
         try {
@@ -149,7 +180,10 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                     <div>
                         <Card key={question[idProperty]} style={{ marginBottom: '20px' }}>
                             <Card.Body>
-                                <Card.Title className="clickable-title" onClick={() => handleClick(question[idProperty], question[titleProperty], question[detailProperty])}>{question[titleProperty]}</Card.Title>
+                                <Card.Title className="clickable-title" onClick={() => handleClick(question[idProperty], question[titleProperty], question[detailProperty])}>
+                                    {question[titleProperty]}
+                                    
+                                    </Card.Title>
                                 <Card.Text>{question[detailProperty]}</Card.Text>
                                 {currentTab === 'Assessment' &&
                                 <>
@@ -157,8 +191,9 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                                     <Button variant="secondary" onClick={() => handleAddToCorrectionBook(question[idProperty])}>Add to Correction Book</Button>
                                 </>}
 
-                                <Button variant="danger" onClick={() => handleDelete(question[idProperty])}>delete</Button>
+                                {/* <Button variant="danger" onClick={() => handleDelete(question[idProperty])}>delete</Button> */}
                             </Card.Body>
+                            {currentTab === 'Assessment' && <span style={{position: 'absolute', right: '10px', bottom: '10px'}}>Mark: {mark !== null ? mark : 'null'}</span>}
                         </Card>
                         {currentTab === 'Assessment' ?
                             <QuestionWithAns
