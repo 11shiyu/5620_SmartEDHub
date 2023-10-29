@@ -116,7 +116,7 @@ function Message() {
           </Col>
 
           {/* 右侧区域 */}
-          <Col md={{span: 6, offset: 1}}>
+          <Col md={9}>
             <div className="py-3">
               <h3>{currentTab} List</h3>
 

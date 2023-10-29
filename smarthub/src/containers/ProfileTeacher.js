@@ -21,7 +21,7 @@ function ProfileTeacher({ teacherData }) {
                 <Card style={{ width: '20rem', marginLeft: '80px' }}>
                   <Card.Img variant="top" src={teacherImage} />
                   <Card.Body>
-                    <Card.Title>teacher name</Card.Title>
+                    <Card.Title>{teacherUsername}</Card.Title>
                   </Card.Body>
                 </Card>
               </div>
