@@ -97,12 +97,14 @@ class Login extends Component {
             .then(data => {
               console.log('teacherInfo:', data); 
               sessionStorage.setItem("teacherInfo", JSON.stringify(data));
+              this.context('/Home');
             })
             .catch(error => {
               console.error('获取老师信息请求失败', error);
             });
           }else{
             sessionStorage.setItem("role",3);
+            this.context('/Home');
           }
           }).catch(error => {
             console.error('请求失败', error);

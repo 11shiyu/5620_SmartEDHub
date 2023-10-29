@@ -29,7 +29,7 @@ function App() {
       <div className="App">
         <NavigationBar />
         <Routes>
-          <Route path="/" element={<Navigate to="/Login" replace />} />
+          <Route path="/" element={<Navigate to="/Home" replace />} />
 
           <Route path="/Home" element={<Home />} />
           <Route path="/Message" element={<Message />} />

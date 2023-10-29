@@ -1,13 +1,48 @@
-import React from 'react';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Card, Button, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import studentImage from '../assets/student.png';
 
 function ProfileStudent({ studentData }) {
+
   const navigate = useNavigate();
   const studentUsername = JSON.parse(sessionStorage.getItem('studentInfo')).username;
   const studentId = JSON.parse(sessionStorage.getItem('studentInfo')).teacherId;
   const studentEmail = JSON.parse(sessionStorage.getItem('studentInfo')).email;
+
+  const studentInfo = JSON.parse(sessionStorage.getItem('studentInfo'));
+  const [imageURL, setImageURL] = useState(studentInfo?.avatar || studentImage);
+  
+  useEffect(() => {
+    if (studentInfo?.avatar) {
+      setImageURL(studentInfo.avatar);
+    }
+  }, [studentInfo]);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('http://localhost:8090/student/updateAvatar', {
+        method: 'POST',
+        headers: {
+          'Authorization': window.sessionStorage.getItem('tokenStr')
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.data) {
+        setImageURL(data.data);
+        sessionStorage.setItem('studentInfo', JSON.stringify({ ...studentInfo, avatar: data.data }));
+      }
+    } catch (error) {
+      console.error("Error uploading the image:", error);
+    }
+  };
 
   return (
     <div style={{ padding: '20px' }}>
@@ -20,7 +55,7 @@ function ProfileStudent({ studentData }) {
                 <Card style={{ width: '20rem', marginLeft: '80px' }}>
                   <Card.Img variant="top" src={studentImage} />
                   <Card.Body>
-                    <Card.Title>student name</Card.Title>
+                    <Card.Title>{studentUsername}</Card.Title>
                   </Card.Body>
                 </Card>
               </div>
