@@ -1,6 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
+import { useNavigate } from 'react-router-dom';
+import NavigateContext from './components/NavigateContext';
+import { Navigate } from 'react-router-dom';
+
 import NavigationBar from './components/NavigationBar';
 
 import Home from './containers/Home';
@@ -25,7 +29,9 @@ function App() {
       <div className="App">
         <NavigationBar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/Login" replace />} />
+
+          <Route path="/Home" element={<Home />} />
           <Route path="/Message" element={<Message />} />
           <Route path="/AIPractice" element={<AIPractice />} />
           <Route path="/ProfileStudent" element={<ProfileStudent />} />
@@ -35,7 +41,7 @@ function App() {
           <Route path="/CreateAssignment" element={<CreateAssignment />} />
           <Route path="/Grading" element={<Grading />} />
           <Route path="/ClassManagement" element={<ClassManagement />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/Login" element={<LoginWithNavigate />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/GenerateAssign" element={<GenerateAssign />} />
           <Route path="/Announcement" element={<Announcement />} />
@@ -43,6 +49,15 @@ function App() {
         </Routes>
       </div>
     </Router>
+  );
+}
+
+function LoginWithNavigate() {
+  const navigate = useNavigate();
+  return (
+    <NavigateContext.Provider value={navigate}>
+      <Login />
+    </NavigateContext.Provider>
   );
 }
 

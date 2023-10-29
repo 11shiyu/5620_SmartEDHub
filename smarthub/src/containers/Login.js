@@ -1,9 +1,10 @@
 import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
-//import { useHistory } from 'react-router-dom';
-//import axios from '../axiosConfig'; 
+import { Link, useNavigate } from 'react-router-dom';
+import NavigateContext from '../components/NavigateContext';
 
 class Login extends Component {
+  static contextType = NavigateContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +42,7 @@ class Login extends Component {
 
   handleLogin = () => {
 
+    
     const { username, password } = this.state;
     if (username === '' || password === '') {
         this.showNotification('Please input all the information!')
@@ -74,8 +76,9 @@ class Login extends Component {
             .then(data => {
               console.log('studentInfo:', data); 
               sessionStorage.setItem("studentInfo", JSON.stringify(data));
-              // const history = useHistory();
-              // history.push('/Home');
+              // const navigate = useNavigate();
+              // navigate('/Home');
+              this.context('/Home');
             })
             .catch(error => {
               console.error('获取学生信息请求失败', error);
