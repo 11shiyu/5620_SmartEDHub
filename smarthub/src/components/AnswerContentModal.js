@@ -60,6 +60,7 @@ function AnswerContentModal({show, handleClose, answerData}) {
             }
             console.log('Mark successfully')
             handleClose();
+            window.location.reload();
         } catch (error) {
             console.error('Failed to mark the answer:', error);
         }

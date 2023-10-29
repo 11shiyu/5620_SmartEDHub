@@ -33,7 +33,8 @@ function Grading() {
                     questionId: answerItem.questionId,
                     studentId: answerItem.studentId,
                     classname: answerItem.classname,
-                    questionAnswer: answerItem.questionAnswer
+                    questionAnswer: answerItem.questionAnswer,
+                    questionMark: answerItem.mark
                 };
             }));
             setAnsListData(answerListData);
