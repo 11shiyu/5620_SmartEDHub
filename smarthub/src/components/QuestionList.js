@@ -149,7 +149,7 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                     <div>
                         <Card key={question[idProperty]} style={{ marginBottom: '20px' }}>
                             <Card.Body>
-                                <Card.Title onClick={() => handleClick(question[idProperty], question[titleProperty], question[detailProperty])}>{question[titleProperty]}</Card.Title>
+                                <Card.Title className="clickable-title" onClick={() => handleClick(question[idProperty], question[titleProperty], question[detailProperty])}>{question[titleProperty]}</Card.Title>
                                 <Card.Text>{question[detailProperty]}</Card.Text>
                                 {currentTab === 'Assessment' &&
                                 <>

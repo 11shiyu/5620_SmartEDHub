@@ -123,3 +123,17 @@ th, td {
     background-color: darkred;
     color: white;
 }
+
+.clickable-title {
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+    transition: font-size 0.5s, background-color 0.5s;
+    border-radius: 10px;  /* 这里设置圆角 */
+    padding: 5px 8px; 
+}
+
+.clickable-title:hover {
+    font-size: 1.5em; /* 字体在hover时逐渐变大 */
+    background-color: rgba(135, 206, 250, 0.5); /* 悬停时背景颜色逐渐变为蓝色，半透明 */
+}
