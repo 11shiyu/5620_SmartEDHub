@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/AIPractice.css'
-import '../css/Styles.css';
+
 
 class AIPractice extends Component {
 
@@ -15,7 +15,7 @@ class AIPractice extends Component {
       MCQ: {questionTitle: "Thank you",questionDetail: "Let's begin"},
       isArtSelected: false,
       imageURL: '../assets/1.jpg', 
-      isLoading: false,
+
     };
   }
 
@@ -68,14 +68,14 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        this.setState({ isLoading: true });
+
         const data = await response.json();
         console.log( data);
         this.setState({ AI: data.msg });
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          this.setState({ isLoading: false });
+
         }
       
     }else if(this.state.selectedOption === 'grammar'){
@@ -87,14 +87,14 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        this.setState({ isLoading: true });
+
         const data = await response.json();
         console.log( data);
         this.setState({ AI: data.msg });
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          this.setState({ isLoading: false });
+
         }
     }else if(this.state.selectedOption === 'art'){
       try {
@@ -105,7 +105,7 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        this.setState({ isLoading: true });
+
         const data = await response.json();
         console.log(data[0]);
         this.setState({imageURL: data[0]})
@@ -113,7 +113,7 @@ class AIPractice extends Component {
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          this.setState({ isLoading: false });
+
         }
     }else{
       try {
@@ -124,14 +124,14 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        this.setState({ isLoading: true });
+
         const data = await response.json();
         console.log(data.data);
         this.setState({ MCQ: data.data });
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          this.setState({ isLoading: false });
+
         }
     }
   };
@@ -236,11 +236,6 @@ class AIPractice extends Component {
         >Submit</div>
 
       </div>
-          {this.state.isLoading && (
-            <div className="overlay">
-              <div className="loader"></div>
-            </div>
-          )}
         
       </div>
     );
