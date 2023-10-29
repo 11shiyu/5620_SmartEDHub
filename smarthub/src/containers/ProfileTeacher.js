@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import teacherImage from '../assets/teacher.png';
@@ -10,6 +10,43 @@ function ProfileTeacher({ teacherData }) {
   const teacherId = JSON.parse(sessionStorage.getItem('teacherInfo')).teacherId;
   const teacherEmail = JSON.parse(sessionStorage.getItem('teacherInfo')).email;
 
+  const teacherInfo = JSON.parse(sessionStorage.getItem('teacherInfo'));
+  const [imageURL, setImageURL] = useState(teacherInfo?.avatar || teacherImage);
+  
+  useEffect(() => {
+    if (teacherInfo?.avatar) {
+      setImageURL(teacherInfo.avatar);
+    }
+  }, [teacherInfo]);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('multipartFile', file);
+
+    try {
+      const response = await fetch('http://localhost:8090/teacher/updateTeacherAvatar', {
+        method: 'POST',
+        headers: {
+          'Authorization': window.sessionStorage.getItem('tokenStr')
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.data) {
+        setImageURL(data.data);
+        console.log("responce data:", data);
+        console.log("image before set:", teacherInfo.avatar);
+        sessionStorage.setItem('teacherInfo', JSON.stringify({ ...teacherInfo, avatar: data.data }));
+        console.log("image after url:", teacherInfo.avatar);
+      }
+    } catch (error) {
+      console.error("Error uploading the image:", error);
+    }
+  };
+  
   return (
     <div style={{ padding: '20px' }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -19,9 +56,10 @@ function ProfileTeacher({ teacherData }) {
             <Col md={5}>
               <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <Card style={{ width: '20rem', marginLeft: '80px' }}>
-                  <Card.Img variant="top" src={teacherImage} />
+                  <Card.Img variant="top" src={imageURL} />
                   <Card.Body>
                     <Card.Title>{teacherUsername}</Card.Title>
+                    <input type="file" onChange={handleImageUpload} />
                   </Card.Body>
                 </Card>
               </div>

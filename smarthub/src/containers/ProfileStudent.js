@@ -22,7 +22,7 @@ function ProfileStudent({ studentData }) {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('multipartFile', file);
 
     try {
       const response = await fetch('http://localhost:8090/student/updateAvatar', {
@@ -37,7 +37,9 @@ function ProfileStudent({ studentData }) {
 
       if (data.data) {
         setImageURL(data.data);
+        console.log("image before set:", studentInfo.avatar);
         sessionStorage.setItem('studentInfo', JSON.stringify({ ...studentInfo, avatar: data.data }));
+        console.log("image after url:", studentInfo.avatar);
       }
     } catch (error) {
       console.error("Error uploading the image:", error);
@@ -53,9 +55,10 @@ function ProfileStudent({ studentData }) {
             <Col md={5}>
               <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <Card style={{ width: '20rem', marginLeft: '80px' }}>
-                  <Card.Img variant="top" src={studentImage} />
+                  <Card.Img variant="top" src={imageURL} />
                   <Card.Body>
                     <Card.Title>{studentUsername}</Card.Title>
+                    <input type="file" onChange={handleImageUpload} />
                   </Card.Body>
                 </Card>
               </div>
