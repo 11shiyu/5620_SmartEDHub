@@ -68,7 +68,7 @@ function CreateClassModal({ show, handleClose, setRefreshTrigger }) {
             const classData = await getClassIDResponse.json();
             const classInfo = classData.data.find(c => c.classname === className && c.username === teacherUsername);
             if (!classInfo) {
-                throw new Error(`Class with name ${className} not found for teacher S005`);
+                throw new Error(`Class with name ${className} not found for teacher ${teacherUsername}`);
             }
             const classID = classInfo.classId;
             console.log(classID);
