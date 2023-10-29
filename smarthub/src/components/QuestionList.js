@@ -38,12 +38,96 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
     const [currentTitle, setCurrentTitle] = useState('');  // 新状态，用于保存当前选中的questionTitle
     const [currentDetail, setCurrentDetail] = useState('');  // 新状态，用于保存当前选中的questionDetail
     const [currentId, setCurrentId] = useState(null);
+    const username = JSON.parse(sessionStorage.getItem('studentInfo')).username
+
 
     const handleClick = (id, title, detail) => {
         setCurrentTitle(title);  // 设置当前选中的questionTitle
         setCurrentDetail(detail);  // 设置当前选中的questionDetail
         setShowModal(true);  // 显示模态框
         setCurrentId(id);
+    };
+
+    async function addToFavourites() {
+        try {
+            const response = await fetch(`http://localhost:8090/my-favourite/addToFavourite?questionId=${currentId}&username=${username}`, {
+                method: 'PUT', // 设置请求方法为POST
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头
+                    'Authorization': window.sessionStorage.getItem('tokenStr')
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json();
+            console.log("addToFavourites Data", data);
+            //setAnnouncements(data.data); // 假设您想要将返回的数据保存到test状态中
+        } catch (error) {
+            console.error('添加到Favourites失败:', error);
+        }
+    }
+
+    async function addToFavourites() {
+        try {
+            const response = await fetch(`http://localhost:8090/my-favourite/addToFavourite?questionId=${currentId}&username=${username}`, {
+                method: 'PUT', // 设置请求方法为POST
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头
+                    'Authorization': window.sessionStorage.getItem('tokenStr')
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json();
+            console.log("addToFavourites URL", `http://localhost:8090/my-favourite/addToFavourite?questionId=${currentId}&username=${username}`);
+            console.log("addToFavourites Data", data);
+            //setAnnouncements(data.data); // 假设您想要将返回的数据保存到test状态中
+        } catch (error) {
+            console.error('addToFavourites 失败:', error);
+        }
+    }
+
+    async function addToCorrectionBook() {
+        try {
+            const response = await fetch(`http://localhost:8090/correction-notebook/addToCorrection?questionId=${currentId}&username=${username}`, {
+                method: 'PUT', // 设置请求方法为POST
+                headers: {
+                    'Content-Type': 'application/json', // 设置请求头
+                    'Authorization': window.sessionStorage.getItem('tokenStr')
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json();
+            console.log("addToCorrectionBook URL", `http://localhost:8090/correction-notebook/addToCorrection?questionId=${currentId}&username=${username}`);
+            console.log("addToCorrectionBook Data", data);
+            //setAnnouncements(data.data); // 假设您想要将返回的数据保存到test状态中
+        } catch (error) {
+            console.error('addToCorrectionBook 失败:', error);
+        }
+    }
+
+    // Handles adding to favourites
+    const handleAddToFavourites = async (id) => {
+        //const username = 'your_username'; // Replace this with the actual username
+        setCurrentId(id);
+        await addToFavourites();
+    };
+
+    // Handles adding to correction book
+    const handleAddToCorrectionBook = async (id) => {
+        //const username = 'your_username'; // Replace this with the actual username
+        setCurrentId(id);
+        await addToCorrectionBook();
     };
 
     return (
@@ -67,23 +151,29 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
                             <Card.Body>
                                 <Card.Title onClick={() => handleClick(question[idProperty], question[titleProperty], question[detailProperty])}>{question[titleProperty]}</Card.Title>
                                 <Card.Text>{question[detailProperty]}</Card.Text>
+                                {currentTab === 'Assessment' &&
+                                <>
+                                    <Button variant="primary" onClick={() => handleAddToFavourites(question[idProperty])}>Favourite</Button>
+                                    <Button variant="secondary" onClick={() => handleAddToCorrectionBook(question[idProperty])}>Add to Correction Book</Button>
+                                </>}
+
                                 <Button variant="danger" onClick={() => handleDelete(question[idProperty])}>delete</Button>
                             </Card.Body>
                         </Card>
                         {currentTab === 'Assessment' ?
-                        <QuestionWithAns
-                            show={showModal}
-                            handleClose={() => setShowModal(false)}
-                            questionId={currentId}
-                            questionTitle={currentTitle}
-                            questionDetail={currentDetail}
-                        /> :
-                        <QuestionWithoutAns
-                            show={showModal}
-                            handleClose={() => setShowModal(false)}
-                            questionTitle={currentTitle}
-                            questionDetail={currentDetail}
-                        />}
+                            <QuestionWithAns
+                                show={showModal}
+                                handleClose={() => setShowModal(false)}
+                                questionId={currentId}
+                                questionTitle={currentTitle}
+                                questionDetail={currentDetail}
+                            /> :
+                            <QuestionWithoutAns
+                                show={showModal}
+                                handleClose={() => setShowModal(false)}
+                                questionTitle={currentTitle}
+                                questionDetail={currentDetail}
+                            />}
                     </div>
                 );
             })}
