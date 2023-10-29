@@ -9,14 +9,17 @@ class AIPractice extends Component {
       textInput: '',
       languageInput: '',
       placeholderText: 'Please input the sentence or essay',
-      AI: 'Thanks for your using!',
+      AI: '',
       MCQ: {questionTitle: "Thank you",questionDetail: "Let's begin"},
+      isArtSelected: false,
+      imageURL: '../assets/1.jpg', 
     };
   }
 
   handleOptionChange = (event) => {
     const selectedOption = event.target.value;
     let placeholderText = '';
+    let AI = '';
 
     if (selectedOption === 'translation') {
       placeholderText = 'Please input the sentence or essay';
@@ -24,11 +27,23 @@ class AIPractice extends Component {
       placeholderText = 'Please input the sentence or essay';
     } else if (selectedOption === 'question') {
       placeholderText = 'Please input the requirements of the question';
+    }else if(selectedOption === 'art'){
+      placeholderText = 'Please input the requirements of the art';
+      this.setState({
+        
+        isArtSelected: true,
+        selectedOption,
+        placeholderText,
+      });
+    }
+    if (selectedOption !== 'art') {
+      AI = 'Thanks for your using!';
     }
 
     this.setState({
       selectedOption,
       placeholderText,
+      AI,
     });
   };
 
@@ -73,6 +88,25 @@ class AIPractice extends Component {
         const data = await response.json();
         console.log( data);
         this.setState({ AI: data.msg });
+        } catch (error) {
+            console.error(`Could not submit form. Error: ${error}`);
+        } finally {
+        
+        }
+    }else if(this.state.selectedOption === 'art'){
+      try {
+        const response = await fetch(`http://localhost:8090/generateImagesByGPT?text=${this.state.textInput}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // 设置请求头部
+                'Authorization': sessionStorage.getItem("tokenStr")
+            },
+        });
+        
+        const data = await response.json();
+        console.log(data[0]);
+        this.setState({imageURL: data[0]})
+        // this.setState({ AI: data.msg });
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
@@ -132,10 +166,20 @@ class AIPractice extends Component {
             />
             MCQ
           </label>
+          <label>
+            <input
+              type="radio"
+              value="art"
+              checked={this.state.selectedOption === 'art'}
+              onChange={this.handleOptionChange}
+              style={{marginRight:"20px",marginLeft:"30px"}}
+            />
+            Art
+          </label>
         </div>
 
         
-        <div className='AI'>
+        <div className={this.state.isArtSelected ? 'artLayout' : 'AI'}>
         {this.state.selectedOption === 'question' && this.state.MCQ && (
           <>
             <p>{this.state.MCQ.questionTitle}</p>
@@ -148,6 +192,13 @@ class AIPractice extends Component {
             
           </>
         )}
+        {this.state.selectedOption === 'art' && (
+          <>
+            <img src={this.state.imageURL} alt="" 
+            className='image'/>
+            
+          </>
+        )}
         </div>
         
 
@@ -157,7 +208,7 @@ class AIPractice extends Component {
           placeholder={this.state.placeholderText}
           rows="10"
           cols="60"
-          className="textInput"
+          className={this.state.isArtSelected ? 'artTextArea' : 'textInput'}
         ></textarea>
       
       <div className="languageInput">
@@ -174,7 +225,10 @@ class AIPractice extends Component {
       </div>
         
       <div className='submitCont' onClick={this.submit}>
-        <div className='submit'>Submit</div>
+        <div 
+        
+        className={this.state.isArtSelected ? 'artSubmit' : 'submit'}
+        >Submit</div>
 
       </div>
 
