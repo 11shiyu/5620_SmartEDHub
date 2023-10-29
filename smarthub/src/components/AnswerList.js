@@ -22,7 +22,7 @@ function AnswerList({ansListData, setAnsListData}) {
                             <Card.Text>
                                 <strong>Question ID: </strong>{answerItem.questionId} <br/>
                                 <strong>Student ID: </strong>{answerItem.studentId} <br/>
-                                <strong>Mark: </strong> {answerItem.questionMark}
+                                <strong>Score: </strong> {answerItem.questionMark}
                             </Card.Text>
                             <Button variant='primary' onClick={() => handleEdit(answerItem)}>Mark</Button>
                         </div>

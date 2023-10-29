@@ -67,7 +67,7 @@ function ProfileStudent({ studentData }) {
             {/* Col for student information */}
             <Col md={1}>
               <div>
-                <h5 style={{textAlign: 'left'}}><strong>ID:{studentId}</strong></h5>
+                <h5><strong>ID:{studentId}</strong></h5>
                 <p></p>
                 <h5><strong>NAME:</strong></h5>
                 <p>{studentUsername}</p>
