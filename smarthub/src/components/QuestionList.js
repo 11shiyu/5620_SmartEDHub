@@ -48,9 +48,9 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
         setCurrentId(id);
     };
 
-    async function addToFavourites() {
+    async function addToFavourites(id) {
         try {
-            const response = await fetch(`http://localhost:8090/my-favourite/addToFavourite?questionId=${currentId}&username=${username}`, {
+            const response = await fetch(`http://localhost:8090/my-favourite/addToFavourite?questionId=${id}&username=${username}`, {
                 method: 'PUT', // 设置请求方法为POST
                 headers: {
                     'Content-Type': 'application/json', // 设置请求头
@@ -70,9 +70,9 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
         }
     }
 
-    async function addToFavourites() {
+    async function addToFavourites(id) {
         try {
-            const response = await fetch(`http://localhost:8090/my-favourite/addToFavourite?questionId=${currentId}&username=${username}`, {
+            const response = await fetch(`http://localhost:8090/my-favourite/addToFavourite?questionId=${id}&username=${username}`, {
                 method: 'PUT', // 设置请求方法为POST
                 headers: {
                     'Content-Type': 'application/json', // 设置请求头
@@ -120,14 +120,14 @@ function QuestionList({ questions, setQuestions, currentTab }) { // 通过结构
     const handleAddToFavourites = async (id) => {
         //const username = 'your_username'; // Replace this with the actual username
         setCurrentId(id);
-        await addToFavourites();
+        await addToFavourites(id);
     };
 
     // Handles adding to correction book
     const handleAddToCorrectionBook = async (id) => {
         //const username = 'your_username'; // Replace this with the actual username
         setCurrentId(id);
-        await addToCorrectionBook();
+        await addToCorrectionBook(id);
     };
 
     return (
