@@ -5,6 +5,9 @@ import studentImage from '../assets/student.png';
 
 function ProfileStudent({ studentData }) {
   const navigate = useNavigate();
+  const studentUsername = JSON.parse(sessionStorage.getItem('studentInfo')).username;
+  const studentId = JSON.parse(sessionStorage.getItem('studentInfo')).teacherId;
+  const studentEmail = JSON.parse(sessionStorage.getItem('studentInfo')).email;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -26,12 +29,12 @@ function ProfileStudent({ studentData }) {
             {/* Col for student information */}
             <Col md={1}>
               <div>
-                <h5>id</h5>
-                <p>student ID</p>
-                <h5>name</h5>
-                <p>student name</p>
-                <h5>email</h5>
-                <p>studentname@uni.sydney.edu.au</p>
+                <h5 style={{textAlign: 'left'}}><strong>ID:</strong></h5>
+                <p>{studentId}</p>
+                <h5><strong>NAME:</strong></h5>
+                <p>{studentUsername}</p>
+                <h5><strong>EMAIL:</strong></h5>
+                <p>{studentEmail}</p>
                 {/* 更多的学生信息 */}
               </div>
             </Col>

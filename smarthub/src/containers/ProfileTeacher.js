@@ -6,6 +6,9 @@ import teacherImage from '../assets/teacher.png';
 function ProfileTeacher({ teacherData }) {
 
   const navigate = useNavigate();
+  const teacherUsername = JSON.parse(sessionStorage.getItem('teacherInfo')).username;
+  const teacherId = JSON.parse(sessionStorage.getItem('teacherInfo')).teacherId;
+  const teacherEmail = JSON.parse(sessionStorage.getItem('teacherInfo')).email;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -27,12 +30,12 @@ function ProfileTeacher({ teacherData }) {
             {/* Col for teacher information */}
             <Col md={1}>
               <div>
-                <h5>id</h5>
-                <p>teacher ID</p>
-                <h5>name</h5>
-                <p>teacher name</p>
-                <h5>email</h5>
-                <p>teachername@uni.sydney.edu.au</p>
+                <h5 style={{textAlign: 'left'}}><strong>ID:</strong></h5>
+                <p>{teacherId}</p>
+                <h5><strong>NAME:</strong></h5>
+                <p>{teacherUsername}</p>
+                <h5><strong>EMAIL:</strong></h5>
+                <p>{teacherEmail}</p>
                 {/* 更多的老师信息 */}
               </div>
             </Col>
