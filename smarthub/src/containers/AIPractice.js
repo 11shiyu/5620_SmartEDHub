@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import '../css/AIPractice.css'
 import '../css/Styles.css';
 
@@ -15,6 +15,7 @@ class AIPractice extends Component {
       MCQ: {questionTitle: "Thank you",questionDetail: "Let's begin"},
       isArtSelected: false,
       imageURL: '../assets/1.jpg', 
+      isLoading: false,
     };
   }
 
@@ -58,8 +59,6 @@ class AIPractice extends Component {
   };
 
   submit  = async (e) =>{
-    const [isLoading, setIsLoading] = useState(flase);
-
     if(this.state.selectedOption === 'translation'){
       try {
         const response = await fetch(`http://localhost:8090/translation?targetLanguage=${this.state.languageInput}&text=${this.state.textInput}`, {
@@ -69,14 +68,14 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        setIsLoading(true);
+        this.setState({ isLoading: true });
         const data = await response.json();
         console.log( data);
         this.setState({ AI: data.msg });
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          setIsLoading(false);
+          this.setState({ isLoading: false });
         }
       
     }else if(this.state.selectedOption === 'grammar'){
@@ -88,14 +87,14 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        setIsLoading(true);
+        this.setState({ isLoading: true });
         const data = await response.json();
         console.log( data);
         this.setState({ AI: data.msg });
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          setIsLoading(false);
+          this.setState({ isLoading: false });
         }
     }else if(this.state.selectedOption === 'art'){
       try {
@@ -106,7 +105,7 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        setIsLoading(true);
+        this.setState({ isLoading: true });
         const data = await response.json();
         console.log(data[0]);
         this.setState({imageURL: data[0]})
@@ -114,7 +113,7 @@ class AIPractice extends Component {
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          setIsLoading(false);
+          this.setState({ isLoading: false });
         }
     }else{
       try {
@@ -125,19 +124,20 @@ class AIPractice extends Component {
                 'Authorization': sessionStorage.getItem("tokenStr")
             },
         });
-        setIsLoading(true);
+        this.setState({ isLoading: true });
         const data = await response.json();
         console.log(data.data);
         this.setState({ MCQ: data.data });
         } catch (error) {
             console.error(`Could not submit form. Error: ${error}`);
         } finally {
-          setIsLoading(false);
+          this.setState({ isLoading: false });
         }
     }
   };
 
   render() {
+
     return (
       <div className="AIPractice">
         <div className="radioOptions">
@@ -236,7 +236,7 @@ class AIPractice extends Component {
         >Submit</div>
 
       </div>
-          {isLoading && (
+          {this.state.isLoading && (
             <div className="overlay">
               <div className="loader"></div>
             </div>
