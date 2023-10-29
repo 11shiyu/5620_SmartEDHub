@@ -68,7 +68,7 @@ function ProfileTeacher({ teacherData }) {
             {/* Col for teacher information */}
             <Col md={1}>
               <div>
-                <h5 style={{textAlign: 'left'}}><strong>ID:</strong></h5>
+                <h5><strong>ID:</strong></h5>
                 <p>{teacherId}</p>
                 <h5><strong>NAME:</strong></h5>
                 <p>{teacherUsername}</p>
